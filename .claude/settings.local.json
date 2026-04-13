@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ng build:*)",
+      "Bash(mv \"E:/College 8/codehub-Final/CLAUDE.md\" \"E:/College 8/codehub-Final/codehub/CLAUDE.md\")",
+      "Bash(mv \"E:/College 8/codehub-Final/.claude\" \"E:/College 8/codehub-Final/codehub/.claude\")",
+      "WebFetch(domain:www.duolingo.com)",
+      "Bash(npx ng:*)"
+    ]
+  }
+}

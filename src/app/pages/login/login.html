@@ -1,0 +1,31 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <span class="green">{{ '{' }}</span>CodeHub<span class="green">{{ '}' }}</span>
+    </div>
+    <h2>Welcome back!</h2>
+    <p class="auth-sub">Log in to continue your streak</p>
+
+    @if (error) {
+      <div class="alert alert-error">{{ error }}</div>
+    }
+
+    <form (ngSubmit)="submit()">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" [(ngModel)]="email" name="email" placeholder="you@example.com" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" [(ngModel)]="password" name="password" placeholder="••••••••" />
+      </div>
+      <button type="submit" class="btn-duo btn-duo-primary btn-full" [disabled]="loading">
+        {{ loading ? 'Logging in...' : 'Log In' }}
+      </button>
+    </form>
+
+    <p class="auth-footer">
+      New to CodeHub? <a routerLink="/register">Create a free account</a>
+    </p>
+  </div>
+</div>

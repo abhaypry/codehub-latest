@@ -1,0 +1,90 @@
+<app-navbar></app-navbar>
+
+<div class="quiz-wrap">
+  @if (loading) {
+    <div class="quiz-loading">Loading...</div>
+
+  } @else if (noHearts) {
+    <div class="no-hearts-screen">
+      <div class="nh-icon">💔</div>
+      <h2>You're out of hearts!</h2>
+      <p>Come back later when your hearts refill, or keep practising to restore them.</p>
+      <a routerLink="/dashboard" class="btn-duo btn-duo-primary">Back to Dashboard</a>
+    </div>
+
+  } @else if (questions.length === 0) {
+    <div class="quiz-empty">
+      <p>No questions for this lesson yet.</p>
+      <a routerLink="/courses" class="btn-duo btn-duo-primary">Back to Courses</a>
+    </div>
+
+  } @else if (finished) {
+    <div class="result-screen" @slideUp>
+      <div class="result-emoji">
+        @if (correct === questions.length) { 🏆 }
+        @else if (correct >= questions.length / 2) { 🎉 }
+        @else { 💪 }
+      </div>
+      <h2>Lesson Complete!</h2>
+      <div class="result-score">{{ correct }} / {{ questions.length }} correct</div>
+      <div class="result-xp">+{{ xpEarned }} XP ⚡</div>
+      <div class="result-btns">
+        <a routerLink="/dashboard" class="btn-duo btn-duo-primary">Continue</a>
+        <a routerLink="/courses" class="btn-duo btn-duo-outline">All Courses</a>
+      </div>
+    </div>
+
+  } @else {
+    <!-- Quiz header -->
+    <div class="quiz-header">
+      <button class="btn-close" routerLink="/dashboard">✕</button>
+      <div class="quiz-progress-bar">
+        <div class="qpb-fill" [style.width.%]="progress"></div>
+      </div>
+      <div class="quiz-hearts">
+        @for (full of heartsArray; track $index) {
+          <span class="qheart" [class.empty]="!full">❤️</span>
+        }
+      </div>
+    </div>
+
+    <!-- Question -->
+    <div class="question-area">
+      <p class="q-label">Choose the correct answer</p>
+      <h2 class="q-text">{{ question.question }}</h2>
+
+      <div class="options-grid">
+        @for (opt of options; track opt) {
+          <button
+            class="option-btn"
+            [class.opt-correct]="answered && isCorrect(opt)"
+            [class.opt-wrong]="answered && selected === opt && !isCorrect(opt)"
+            [class.opt-selected]="selected === opt"
+            (click)="select(opt)"
+            [disabled]="answered">
+            <span class="opt-letter">{{ opt.toUpperCase() }}</span>
+            <span class="opt-text">{{ question[optionKey[opt]] }}</span>
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Feedback bar -->
+    @if (answered) {
+      <div class="feedback-bar" [class.fb-correct]="selected === question.correct_option" [class.fb-wrong]="selected !== question.correct_option">
+        <div class="fb-content">
+          <span class="fb-icon">{{ selected === question.correct_option ? '✅' : '❌' }}</span>
+          <div>
+            <div class="fb-title">{{ selected === question.correct_option ? 'Great job!' : 'Incorrect' }}</div>
+            @if (selected !== question.correct_option) {
+              <div class="fb-hint">Correct answer: {{ question[optionKey[question.correct_option]] }}</div>
+            }
+          </div>
+        </div>
+        <button class="btn-duo" [class.btn-duo-primary]="selected === question.correct_option" [class.btn-duo-danger]="selected !== question.correct_option" (click)="next()">
+          {{ current === questions.length - 1 ? 'Finish' : 'Continue' }}
+        </button>
+      </div>
+    }
+  }
+</div>

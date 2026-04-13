@@ -1,0 +1,110 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  height: 64px;
+  background: var(--bg);
+  border-bottom: 2px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+.logo-bracket { color: var(--primary); }
+
+.nav-center {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.nav-center a {
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.15s;
+  border-bottom: 3px solid transparent;
+}
+.nav-center a:hover { color: var(--text); background: var(--bg2); }
+.nav-center a.active { color: var(--primary); border-bottom-color: var(--primary); background: var(--primary-light); }
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stat-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg2);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 6px 12px;
+}
+.stat-val { font-size: 14px; font-weight: 800; }
+.fire { font-size: 16px; }
+.bolt { font-size: 14px; }
+
+.hearts-row { display: flex; gap: 1px; align-items: center; }
+.heart { font-size: 14px; transition: opacity 0.2s; }
+.heart.empty { filter: grayscale(1); opacity: 0.3; }
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #0a1a14;
+  font-weight: 900;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--primary-dark);
+}
+
+.btn-nav-ghost {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 8px 14px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: color 0.15s;
+}
+.btn-nav-ghost:hover { color: var(--text); }
+
+.btn-nav-cta { padding: 10px 20px; font-size: 13px; }
+
+.btn-logout {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.15s;
+  border: 2px solid var(--border);
+}
+.btn-logout:hover { color: var(--danger); border-color: var(--danger); }
+
+@media (max-width: 768px) {
+  .nav-center { display: none; }
+  .hearts-row { display: none; }
+  .stat-pill { padding: 5px 8px; }
+}

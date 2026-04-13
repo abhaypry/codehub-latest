@@ -1,0 +1,33 @@
+<app-navbar></app-navbar>
+
+<div class="page">
+  <div class="breadcrumb">
+    <a routerLink="/courses">Courses</a> <span>/</span> <span>Lessons</span>
+  </div>
+  <div class="page-header">
+    <h1>Lessons</h1>
+    <p>Complete each lesson quiz to earn XP</p>
+  </div>
+
+  <div class="lessons-list">
+    @for (lesson of lessons; track lesson.id; let i = $index) {
+      <div class="lesson-card" [class.lesson-done]="lesson.done">
+        <div class="lesson-num" [class.num-done]="lesson.done">
+          @if (lesson.done) { ✓ } @else { {{ i + 1 }} }
+        </div>
+        <div class="lesson-info">
+          <h3>{{ lesson.title }}</h3>
+          <p>{{ lesson.content }}</p>
+        </div>
+        <div class="lesson-right">
+          <span class="badge badge-xp">+{{ lesson.xp_reward }} XP</span>
+          @if (lesson.done) {
+            <a [routerLink]="['/lessons', lesson.id, 'quiz']" class="btn btn-outline btn-sm">Redo</a>
+          } @else {
+            <a [routerLink]="['/lessons', lesson.id, 'quiz']" class="btn-duo btn-duo-primary btn-sm">Start</a>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,96 @@
+<app-navbar></app-navbar>
+
+<div class="dash-layout">
+  <!-- Left sidebar -->
+  <aside class="sidebar">
+    <div class="user-card">
+      <div class="user-avatar">{{ user?.name?.[0]?.toUpperCase() }}</div>
+      <div class="user-info">
+        <div class="user-name">{{ user?.name }}</div>
+        <div class="user-level">Level {{ level }}</div>
+      </div>
+    </div>
+
+    <div class="xp-card">
+      <div class="xp-row">
+        <span>⚡ XP</span>
+        <span class="xp-val">{{ user?.xp || 0 }}</span>
+      </div>
+      <div class="xp-bar">
+        <div class="xp-fill" [style.width.%]="xpInLevel"></div>
+      </div>
+      <div class="xp-hint">{{ xpInLevel }}/100 to Level {{ level + 1 }}</div>
+    </div>
+
+    <div class="streak-card">
+      <span class="streak-fire">🔥</span>
+      <div>
+        <div class="streak-num">{{ user?.streak || 0 }}</div>
+        <div class="streak-lbl">Day Streak</div>
+      </div>
+    </div>
+
+    <!-- Course tabs -->
+    <div class="course-tabs">
+      <p class="tabs-label">Courses</p>
+      @for (course of courses; track course.id) {
+        <button
+          class="course-tab"
+          [class.active]="selectedCourse?.id === course.id"
+          (click)="selectCourse(course)">
+          <span class="tab-dot" [style.background]="course.color"></span>
+          {{ course.title }}
+        </button>
+      }
+    </div>
+  </aside>
+
+  <!-- Main path -->
+  <main class="path-area">
+    @if (loading) {
+      <div class="path-loading">Loading lessons...</div>
+    } @else {
+      <!-- Section banner -->
+      <div class="section-banner" [style.background]="selectedCourse?.color">
+        <span class="banner-label">Unit 1</span>
+        <span class="banner-title">{{ selectedCourse?.title }}</span>
+        <span class="banner-desc">{{ selectedCourse?.description }}</span>
+      </div>
+
+      <!-- Winding path -->
+      <div class="path">
+        @for (node of pathNodes; track node.id) {
+          <div class="path-row" [attr.data-pos]="node.pos">
+            @if (node.state === 'active') {
+              <div class="node-wrapper active-wrapper">
+                <div class="node-tooltip">START</div>
+                <a [routerLink]="['/lessons', node.id, 'quiz']" class="node node-active">
+                  <span class="node-icon">▶</span>
+                </a>
+                <div class="node-title">{{ node.title }}</div>
+              </div>
+            } @else if (node.state === 'done') {
+              <div class="node-wrapper">
+                <a [routerLink]="['/lessons', node.id, 'quiz']" class="node node-done">
+                  <span class="node-icon">✓</span>
+                </a>
+                <div class="node-title done-title">{{ node.title }}</div>
+              </div>
+            } @else {
+              <div class="node-wrapper">
+                <div class="node node-locked">
+                  <span class="node-icon">🔒</span>
+                </div>
+                <div class="node-title locked-title">{{ node.title }}</div>
+              </div>
+            }
+          </div>
+        }
+
+        @if (pathNodes.length === 0) {
+          <div class="path-empty">No lessons yet. Check back soon!</div>
+        }
+      </div>
+    }
+  </main>
+</div>

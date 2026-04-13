@@ -1,0 +1,27 @@
+<app-navbar></app-navbar>
+
+<div class="page">
+  <div class="page-header">
+    <h1>All Courses</h1>
+    <p>Pick a language and start earning XP</p>
+  </div>
+
+  <div class="courses-grid">
+    @for (course of courses; track course.id) {
+      <a [routerLink]="['/courses', course.id, 'lessons']" class="course-card">
+        <div class="course-banner" [style.background]="course.color">
+          <div class="course-letter">{{ course.title[0] }}</div>
+        </div>
+        <div class="course-body">
+          <h3>{{ course.title }}</h3>
+          <p>{{ course.description }}</p>
+          <div class="course-meta">
+            <span>📚 {{ course.lessons }} lessons</span>
+            <span>👥 {{ course.students | number }} students</span>
+          </div>
+          <button class="btn-duo btn-duo-primary course-btn">Start →</button>
+        </div>
+      </a>
+    }
+  </div>
+</div>

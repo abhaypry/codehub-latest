@@ -1,0 +1,35 @@
+<nav class="navbar">
+  <a routerLink="/" class="logo">
+    <span class="logo-bracket">{{ '{' }}</span>CodeHub<span class="logo-bracket">{{ '}' }}</span>
+  </a>
+
+  @if (auth.isLoggedIn()) {
+    <div class="nav-center">
+      <a routerLink="/dashboard" routerLinkActive="active">Learn</a>
+      <a routerLink="/courses" routerLinkActive="active">Courses</a>
+      <a routerLink="/leaderboard" routerLinkActive="active">Leaderboard</a>
+    </div>
+    <div class="nav-right">
+      <div class="stat-pill">
+        <span class="fire">🔥</span>
+        <span class="stat-val">{{ user?.streak || 0 }}</span>
+      </div>
+      <div class="stat-pill">
+        <span class="bolt">⚡</span>
+        <span class="stat-val">{{ user?.xp || 0 }}</span>
+      </div>
+      <div class="hearts-row">
+        @for (full of heartsArray; track $index) {
+          <span class="heart" [class.empty]="!full">❤️</span>
+        }
+      </div>
+      <a routerLink="/profile" class="avatar">{{ user?.name?.[0]?.toUpperCase() }}</a>
+      <button class="btn-logout" (click)="logout()">Logout</button>
+    </div>
+  } @else {
+    <div class="nav-right">
+      <a routerLink="/login" class="btn-nav-ghost">Login</a>
+      <a routerLink="/register" class="btn-duo btn-duo-primary btn-nav-cta">Get Started</a>
+    </div>
+  }
+</nav>

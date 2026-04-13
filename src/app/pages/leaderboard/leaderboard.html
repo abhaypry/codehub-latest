@@ -1,0 +1,58 @@
+<app-navbar></app-navbar>
+
+<div class="page">
+  <div class="page-header">
+    <h1>🏆 Leaderboard</h1>
+    <p>Top coders ranked by XP</p>
+  </div>
+
+  @if (loading) {
+    <div class="loading">Loading...</div>
+  } @else {
+    @if (leaderboard.length >= 3) {
+      <div class="podium">
+        <div class="pod-item">
+          <div class="pod-avatar silver-av">{{ leaderboard[1].name[0].toUpperCase() }}</div>
+          <div class="pod-name">{{ leaderboard[1].name }}</div>
+          <div class="pod-xp">⚡ {{ leaderboard[1].xp }}</div>
+          <div class="pod-base silver-base"><span>2</span></div>
+        </div>
+        <div class="pod-item gold-item">
+          <div class="pod-crown">👑</div>
+          <div class="pod-avatar gold-av">{{ leaderboard[0].name[0].toUpperCase() }}</div>
+          <div class="pod-name">{{ leaderboard[0].name }}</div>
+          <div class="pod-xp">⚡ {{ leaderboard[0].xp }}</div>
+          <div class="pod-base gold-base"><span>1</span></div>
+        </div>
+        <div class="pod-item">
+          <div class="pod-avatar bronze-av">{{ leaderboard[2].name[0].toUpperCase() }}</div>
+          <div class="pod-name">{{ leaderboard[2].name }}</div>
+          <div class="pod-xp">⚡ {{ leaderboard[2].xp }}</div>
+          <div class="pod-base bronze-base"><span>3</span></div>
+        </div>
+      </div>
+    }
+
+    <div class="lb-list">
+      @for (entry of leaderboard; track entry.id) {
+        <div class="lb-row" [class.is-you]="entry.id === userId">
+          <div class="lb-rank">
+            @if (entry.rank === 1) { 🥇 }
+            @else if (entry.rank === 2) { 🥈 }
+            @else if (entry.rank === 3) { 🥉 }
+            @else { <span class="rank-num">#{{ entry.rank }}</span> }
+          </div>
+          <div class="lb-avatar">{{ entry.name[0].toUpperCase() }}</div>
+          <div class="lb-info">
+            <span class="lb-name">{{ entry.name }}</span>
+            @if (entry.id === userId) { <span class="you-tag">You</span> }
+          </div>
+          <div class="lb-stats">
+            <span class="lb-streak">🔥 {{ entry.streak }}</span>
+            <span class="lb-xp">⚡ {{ entry.xp }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

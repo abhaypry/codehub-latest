@@ -1,0 +1,66 @@
+<app-navbar></app-navbar>
+
+<div class="page">
+  @if (loading) {
+    <div class="loading">Loading...</div>
+  } @else if (profile) {
+    <div class="profile-top">
+      <div class="profile-avatar">{{ profile.name[0].toUpperCase() }}</div>
+      <div class="profile-meta">
+        <h1>{{ profile.name }}</h1>
+        <p class="profile-email">{{ profile.email }}</p>
+        <p class="profile-join">Member since {{ joinDate }}</p>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-emoji">🔥</div>
+        <div class="stat-val">{{ profile.streak }}</div>
+        <div class="stat-lbl">Streak</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-emoji">⚡</div>
+        <div class="stat-val">{{ profile.xp }}</div>
+        <div class="stat-lbl">Total XP</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-emoji">🎯</div>
+        <div class="stat-val">{{ level }}</div>
+        <div class="stat-lbl">Level</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-emoji">📚</div>
+        <div class="stat-val">{{ profile.completed_lessons }}</div>
+        <div class="stat-lbl">Lessons</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-emoji">🏆</div>
+        <div class="stat-val">#{{ profile.rank }}</div>
+        <div class="stat-lbl">Rank</div>
+      </div>
+    </div>
+
+    <div class="level-card">
+      <div class="level-header">
+        <span class="level-title">Level {{ level }}</span>
+        <span class="level-sub">{{ xpInLevel }} / 100 XP</span>
+      </div>
+      <div class="level-bar">
+        <div class="level-fill" [style.width.%]="xpInLevel"></div>
+      </div>
+      <p class="level-hint">{{ 100 - xpInLevel }} XP to reach Level {{ level + 1 }}</p>
+    </div>
+
+    <div class="badges-section">
+      <h3>Badges</h3>
+      <div class="badges-row">
+        <div class="badge-item">🔥</div>
+        <div class="badge-item">⚡</div>
+        <div class="badge-item locked-badge">🔒</div>
+        <div class="badge-item locked-badge">🔒</div>
+        <div class="badge-item locked-badge">🔒</div>
+      </div>
+    </div>
+  }
+</div>
