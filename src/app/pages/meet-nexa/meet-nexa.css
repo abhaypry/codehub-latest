@@ -1,0 +1,286 @@
+/* ── Full page layout ── */
+.nexa-page {
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Center stage ── */
+.nexa-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 60px 40px 20px;
+}
+
+/* ── Speech bubble ── */
+.speech-bubble {
+  position: relative;
+  background: var(--bg3);
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  padding: 16px 28px;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 20px;
+  animation: bubble-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* triangle pointer pointing down */
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 14px solid var(--bg3);
+}
+.speech-bubble::before {
+  content: '';
+  position: absolute;
+  bottom: -17px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 13px solid transparent;
+  border-right: 13px solid transparent;
+  border-top: 15px solid var(--border);
+}
+
+@keyframes bubble-pop {
+  from { opacity: 0; transform: scale(0.7) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ── Nexa avatar wrapper ── */
+.nexa-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: nexa-float 3.5s ease-in-out infinite;
+}
+
+@keyframes nexa-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-14px); }
+}
+
+/* ── Antenna ── */
+.nexa-antenna {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: -2px;
+  z-index: 2;
+}
+.antenna-stem {
+  width: 5px;
+  height: 28px;
+  background: var(--primary-dark);
+  border-radius: 3px;
+}
+.antenna-ball {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 10px var(--primary), 0 0 20px rgba(4,232,141,0.4);
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 10px var(--primary), 0 0 20px rgba(4,232,141,0.4); }
+  50%       { box-shadow: 0 0 18px var(--primary), 0 0 36px rgba(4,232,141,0.6); }
+}
+
+/* ── Head ── */
+.nexa-head {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  background: var(--primary);
+  border-radius: 36px;
+  border: 4px solid var(--primary-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 0 var(--primary-dark), 0 14px 50px rgba(4,232,141,0.25);
+  z-index: 1;
+}
+
+/* Ear panels */
+.nexa-ear {
+  position: absolute;
+  top: 30px;
+  width: 16px;
+  height: 40px;
+  background: var(--primary-dark);
+  border-radius: 6px;
+}
+.nexa-ear-l { left: -18px; }
+.nexa-ear-r { right: -18px; }
+
+/* Visor (face screen) */
+.nexa-visor {
+  width: 130px;
+  height: 110px;
+  background: #0a1a14;
+  border-radius: 22px;
+  border: 2px solid var(--primary-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+/* Eyes */
+.nexa-eyes {
+  display: flex;
+  gap: 20px;
+}
+.nexa-eye {
+  width: 38px;
+  height: 38px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(4,232,141,0.5);
+  animation: eye-blink 4s ease-in-out infinite;
+}
+.nexa-pupil {
+  width: 20px;
+  height: 20px;
+  background: #0a1a14;
+  border-radius: 50%;
+  position: relative;
+}
+.nexa-pupil::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 6px; height: 6px;
+  background: white;
+  border-radius: 50%;
+}
+
+@keyframes eye-blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  95%            { transform: scaleY(0.1); }
+}
+
+/* Smile */
+.nexa-smile {
+  width: 60px;
+  height: 18px;
+  border-radius: 0 0 30px 30px;
+  overflow: hidden;
+  position: relative;
+}
+.nexa-smile-inner {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 36px;
+  border-radius: 50%;
+  border: 4px solid var(--primary);
+}
+
+/* ── Body ── */
+.nexa-body {
+  position: relative;
+  width: 150px;
+  height: 80px;
+  background: var(--primary-dark);
+  border-radius: 0 0 40px 40px;
+  margin-top: -8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid var(--primary-dark);
+  border-top: none;
+  box-shadow: 0 8px 0 color-mix(in srgb, var(--primary-dark) 80%, black);
+}
+
+.nexa-chest-badge {
+  font-size: 18px;
+  font-weight: 900;
+  color: #0a1a14;
+  font-family: 'Courier New', monospace;
+  background: var(--primary);
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+.nexa-arm {
+  position: absolute;
+  width: 20px;
+  height: 52px;
+  background: var(--primary);
+  border-radius: 10px;
+  border: 3px solid var(--primary-dark);
+  top: 4px;
+}
+.nexa-arm-l { left: -22px; transform: rotate(12deg); }
+.nexa-arm-r { right: -22px; transform: rotate(-12deg); }
+
+/* ── Platform shadow ── */
+.nexa-platform {
+  width: 160px;
+  height: 20px;
+  background: rgba(0,0,0,0.45);
+  border-radius: 50%;
+  filter: blur(10px);
+  margin-top: 10px;
+}
+
+/* ── Bottom bar (matches Duolingo exactly) ── */
+.nexa-footer {
+  height: 96px;
+  background: var(--bg2);
+  border-top: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+}
+
+.btn-back {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-muted);
+  background: none;
+  border: 2px solid var(--border);
+  border-bottom: 4px solid var(--border);
+  border-radius: 14px;
+  padding: 13px 36px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.btn-back:hover {
+  color: var(--text);
+  border-color: var(--text-muted);
+}
+
+.btn-continue {
+  padding: 14px 48px;
+  font-size: 15px;
+  border-radius: 14px;
+  letter-spacing: 0.5px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .nexa-head { width: 150px; height: 150px; }
+  .nexa-visor { width: 108px; height: 90px; }
+  .nexa-eye { width: 30px; height: 30px; }
+  .speech-bubble { font-size: 17px; padding: 14px 22px; }
+  .nexa-footer { padding: 0 20px; }
+}

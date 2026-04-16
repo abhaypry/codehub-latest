@@ -56,8 +56,8 @@
 
 .mascot-wrap {
   position: relative;
-  width: 320px;
-  height: 420px;
+  width: 480px;
+  height: 520px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -93,6 +93,16 @@
 @keyframes badge-float {
   0%, 100% { transform: translateY(0px); }
   50%       { transform: translateY(-8px); }
+}
+
+/* ── Nexa Rive character ── */
+.mascot-wrap app-nexa-rive {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: bot-float 3.2s ease-in-out infinite;
+  filter: drop-shadow(0 0 32px rgba(4, 232, 141, 0.55))
+          drop-shadow(0 0 80px rgba(4, 232, 141, 0.25));
 }
 
 /* ── CodeBot mascot ── */
@@ -310,24 +320,25 @@
   background: var(--primary);
   color: #0a1a14;
   text-align: center;
-  padding: 28px 40px;
+  padding: 48px 60px;
 }
 .social-text {
-  font-size: 18px;
-  font-weight: 800;
-  margin-bottom: 16px;
+  font-size: 22px;
+  font-weight: 900;
+  margin-bottom: 20px;
+  letter-spacing: -0.3px;
 }
 .social-pills {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 14px;
 }
 .spill {
-  background: rgba(0,0,0,0.12);
-  padding: 6px 18px;
+  background: rgba(0,0,0,0.13);
+  padding: 10px 22px;
   border-radius: 50px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
 }
 
@@ -335,17 +346,17 @@
    ALTERNATING FEATURE SECTIONS
 ══════════════════════════════════════ */
 .alt-feat {
-  padding: 80px 40px;
+  padding: 120px 60px;
 }
 .alt-feat-tint {
   background: var(--bg2);
 }
 .alt-feat-inner {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   align-items: center;
-  gap: 80px;
+  gap: 100px;
 }
 .alt-feat-flip .alt-feat-inner {
   flex-direction: row-reverse;
@@ -355,21 +366,21 @@
   flex: 1;
 }
 .alt-feat-text h2 {
-  font-size: 46px;
+  font-size: 54px;
   font-weight: 900;
   line-height: 1.05;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 .alt-feat-text p {
-  font-size: 17px;
+  font-size: 18px;
   color: var(--text-muted);
-  line-height: 1.7;
-  max-width: 420px;
+  line-height: 1.75;
+  max-width: 440px;
 }
 
 .alt-feat-visual {
   flex-shrink: 0;
-  width: 340px;
+  width: 440px;
 }
 
 /* ── Phone mock (Feature 1) ── */
@@ -653,30 +664,30 @@
    FINAL CTA
 ══════════════════════════════════════ */
 .cta-final {
-  padding: 100px 40px;
+  padding: 120px 60px;
   text-align: center;
   background: var(--bg2);
   border-top: 2px solid var(--border);
 }
 .cta-final-inner {
-  max-width: 560px;
+  max-width: 600px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
 }
 .cta-bot-mini {
-  font-size: 64px;
+  font-size: 80px;
   animation: bot-float 3s ease-in-out infinite;
 }
 .cta-final h2 {
-  font-size: 42px;
+  font-size: 52px;
   font-weight: 900;
-  line-height: 1.15;
+  line-height: 1.1;
 }
 .cta-final p {
-  font-size: 17px;
+  font-size: 18px;
   color: var(--text-muted);
   font-weight: 700;
 }
@@ -694,62 +705,186 @@
 ══════════════════════════════════════ */
 .site-footer {
   background: var(--bg2);
-  border-top: 2px solid var(--border);
+  border-top: 4px solid var(--primary);
 }
-.footer-inner {
-  max-width: 1100px;
+
+/* ── Top: brand + socials / app badges ── */
+.footer-top {
+  padding: 56px 60px 0;
+}
+.footer-top-inner {
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 60px 40px 40px;
   display: flex;
-  gap: 60px;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
   flex-wrap: wrap;
 }
-.footer-brand {
-  flex: 2;
-  min-width: 200px;
+.footer-brand-block {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 .footer-logo {
-  font-size: 28px;
-  font-weight: 900;
-  margin-bottom: 12px;
+  margin-bottom: 4px;
+}
+.footer-logo-img {
+  height: 48px;
+  width: auto;
+  display: block;
 }
 .green { color: var(--primary); }
 .footer-tagline {
+  font-size: 13px;
   color: var(--text-muted);
-  font-size: 14px;
   font-weight: 700;
-  line-height: 1.6;
+  line-height: 1.65;
+  max-width: 240px;
+}
+.footer-socials {
+  display: flex;
+  gap: 8px;
+  margin-top: 2px;
+}
+.fsocial {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--bg3);
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  text-decoration: none;
+}
+.fsocial:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+/* ── App badges ── */
+.footer-app-block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-end;
+}
+.footer-app-label {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.footer-app-badges {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.app-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+  background: var(--bg3);
+  border: 2px solid var(--border);
+  border-bottom: 4px solid var(--border);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  text-decoration: none;
+  color: var(--text);
+}
+.app-badge:hover { border-color: var(--primary); }
+.badge-sub {
+  display: block;
+  font-size: 10px;
+  color: var(--text-muted);
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+.badge-main {
+  display: block;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* ── Dividers ── */
+.footer-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 44px 60px;
+}
+
+/* ── Link columns ── */
+.footer-cols-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 60px 52px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 32px;
 }
 .footer-col {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 15px;
   min-width: 130px;
 }
 .fcol-title {
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
+  letter-spacing: 1.2px;
   color: var(--text-muted);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 .footer-col a {
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
   transition: color 0.15s;
+  text-decoration: none;
 }
 .footer-col a:hover { color: var(--primary); }
 
+/* ── Bottom bar ── */
 .footer-bottom {
-  border-top: 2px solid var(--border);
-  text-align: center;
-  padding: 20px 40px;
-  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  padding: 22px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-copy {
   font-size: 13px;
   font-weight: 700;
+  color: var(--text-muted);
 }
+.footer-legal {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.footer-legal a {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.footer-legal a:hover { color: var(--primary); }
 
 /* ══════════════════════════════════════
    RESPONSIVE
@@ -767,10 +902,10 @@
 
   .alt-feat { padding: 60px 24px; }
   .alt-feat-inner { flex-direction: column !important; gap: 40px; text-align: center; }
-  .alt-feat-text h2 { font-size: 34px; }
+  .alt-feat-text h2 { font-size: 38px; }
   .alt-feat-text p { max-width: 100%; }
   .alt-feat-visual { width: 100%; }
-  .phone-mock, .stats-mock, .motivate-mock, .courses-mock { max-width: 400px; margin: 0 auto; }
+  .phone-mock, .stats-mock, .motivate-mock, .courses-mock { max-width: 440px; margin: 0 auto; }
 
   .social-band { padding: 24px; }
   .social-text { font-size: 15px; }
@@ -779,7 +914,16 @@
   .cta-final h2 { font-size: 30px; }
   .cta-btns { max-width: 100%; }
 
-  .footer-inner { padding: 40px 24px; gap: 32px; }
+  .footer-top { padding: 40px 24px 0; }
+  .footer-top-inner { flex-direction: column; }
+  .footer-brand-block { max-width: 100%; }
+  .footer-tagline { max-width: 100%; }
+  .footer-app-block { align-items: flex-start; }
+  .footer-app-badges { justify-content: flex-start; }
+  .footer-divider { margin: 32px 24px; }
+  .footer-cols-wrap { padding: 0 24px 36px; gap: 24px; }
+  .footer-bottom { padding: 20px 24px; flex-direction: column; text-align: center; }
+  .footer-legal { justify-content: center; }
 }
 
 @media (max-width: 560px) {

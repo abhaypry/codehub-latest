@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Auth } from '../../services/auth';
@@ -10,15 +10,21 @@ import { Router } from '@angular/router';
   templateUrl: './navbar.html',
   styleUrl: './navbar.css'
 })
-export class Navbar {
+export class Navbar implements OnInit {
+  @Input() forcePublic = false;
+  user: any = null;
+
   constructor(public auth: Auth, private router: Router) {}
+
+  ngOnInit() {
+    this.user = this.auth.getUser();
+  }
 
   logout() {
     this.auth.logout();
-    this.router.navigate(['/']);
+    this.user = null;
   }
 
-  get user() { return this.auth.getUser(); }
   get hearts() { return this.auth.getHearts(); }
   get heartsArray() { return Array(5).fill(0).map((_, i) => i < this.hearts); }
 }

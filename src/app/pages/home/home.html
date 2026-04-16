@@ -1,4 +1,4 @@
-<app-navbar></app-navbar>
+<app-navbar [forcePublic]="true"></app-navbar>
 
 <!-- ══════════════ HERO ══════════════ -->
 <section class="hero">
@@ -20,43 +20,8 @@
         <div class="fbadge fbadge-streak">🔥 7-day streak!</div>
         <div class="fbadge fbadge-heart">❤️ Nice one!</div>
 
-        <!-- CodeBot mascot (CSS art) -->
-        <div class="bot">
-          <!-- graduation cap -->
-          <div class="bot-cap">
-            <div class="cap-base"></div>
-            <div class="cap-top"></div>
-            <div class="cap-tassel"></div>
-          </div>
-          <!-- ears / antennae -->
-          <div class="bot-ears">
-            <div class="bot-ear"></div>
-            <div class="bot-ear"></div>
-          </div>
-          <!-- head -->
-          <div class="bot-head">
-            <div class="bot-visor">
-              <div class="bot-eyes">
-                <div class="bot-eye"><div class="bot-pupil"></div></div>
-                <div class="bot-eye"><div class="bot-pupil"></div></div>
-              </div>
-              <div class="bot-mouth">
-                <span></span><span></span><span></span>
-              </div>
-            </div>
-          </div>
-          <!-- body -->
-          <div class="bot-body">
-            <div class="bot-badge">&lt;/&gt;</div>
-            <div class="bot-arm bot-arm-l"></div>
-            <div class="bot-arm bot-arm-r"></div>
-          </div>
-          <!-- feet -->
-          <div class="bot-feet">
-            <div class="bot-foot"></div>
-            <div class="bot-foot"></div>
-          </div>
-        </div>
+        <!-- Nexa character -->
+        <app-nexa-rive [size]="480"></app-nexa-rive>
         <div class="bot-shadow"></div>
       </div>
     </div>
@@ -237,8 +202,8 @@
   <div class="footer-top">
     <div class="footer-top-inner">
       <div class="footer-brand-block">
-        <div class="footer-logo"><span class="green">{{ '{' }}</span>CodeHub<span class="green">{{ '}' }}</span></div>
-        <p class="footer-tagline">Lowkey the best way to learn coding fr 🤙</p>
+        <div class="footer-logo"><img src="codehub-logo.png" alt="CodeHub" class="footer-logo-img" /></div>
+<p class="footer-tagline">Lowkey the best way to learn coding fr 🤙</p>
         <!-- Social icons -->
         <div class="footer-socials">
           <a href="#" class="fsocial" aria-label="GitHub">
@@ -297,11 +262,11 @@
     </div>
     <div class="footer-col">
       <p class="fcol-title">Platform</p>
-      <a routerLink="/dashboard">My Learning Path</a>
+      <a routerLink="/learn">My Learning Path</a>
       <a routerLink="/leaderboard">Leaderboard</a>
       <a routerLink="/profile">My Profile</a>
-      <a routerLink="/dashboard">Daily Streak</a>
-      <a routerLink="/dashboard">XP & Levels</a>
+      <a routerLink="/learn">Daily Streak</a>
+      <a routerLink="/learn">XP & Levels</a>
     </div>
     <div class="footer-col">
       <p class="fcol-title">Account</p>

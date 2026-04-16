@@ -1,48 +1,73 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+
+const STORAGE_KEY = 'codehub_user';
 
 @Injectable({ providedIn: 'root' })
 export class Auth {
-  private key = 'codehub_user';
+  constructor(private router: Router) {}
 
   getUser(): any {
-    const data = localStorage.getItem(this.key);
-    return data ? JSON.parse(data) : null;
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
   }
 
   setUser(user: any): void {
-    if (!user.hearts && user.hearts !== 0) user.hearts = 5;
-    localStorage.setItem(this.key, JSON.stringify(user));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem(this.key);
+    return !!this.getUser();
   }
 
   logout(): void {
-    localStorage.removeItem(this.key);
+    localStorage.removeItem(STORAGE_KEY);
+    this.router.navigate(['/']);
   }
 
-  updateXP(xp: number, streak: number): void {
-    const user = this.getUser();
-    if (user) { user.xp = xp; user.streak = streak; this.setUser(user); }
+  updateUserCache(user: any): void {
+    this.setUser(user);
   }
 
   getHearts(): number {
     return this.getUser()?.hearts ?? 5;
   }
 
-  decrementHearts(): number {
+  updateXP(xp: number): void {
     const user = this.getUser();
     if (user) {
-      user.hearts = Math.max(0, (user.hearts ?? 5) - 1);
+      user.xp = xp;
       this.setUser(user);
-      return user.hearts;
     }
-    return 0;
+  }
+
+  decrementHearts(): void {
+    const user = this.getUser();
+    if (user && user.hearts > 0) {
+      user.hearts -= 1;
+      this.setUser(user);
+    }
   }
 
   refillHearts(): void {
     const user = this.getUser();
-    if (user) { user.hearts = 5; this.setUser(user); }
+    if (user) {
+      user.hearts = 5;
+      this.setUser(user);
+    }
+  }
+
+  // ── Simple localStorage cache for page data ──
+  setCache(key: string, data: any): void {
+    if (data === null || data === undefined) {
+      localStorage.removeItem(`codehub_cache_${key}`);
+    } else {
+      localStorage.setItem(`codehub_cache_${key}`, JSON.stringify(data));
+    }
+  }
+
+  getCache(key: string): any {
+    const raw = localStorage.getItem(`codehub_cache_${key}`);
+    return raw ? JSON.parse(raw) : null;
   }
 }

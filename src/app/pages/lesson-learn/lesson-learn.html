@@ -1,0 +1,261 @@
+<div class="learn-wrap">
+
+  <!-- ── No hearts ───────────────────────────────────────── -->
+  @if (noHearts) {
+    <div class="no-hearts-screen">
+      <div class="nh-icon">💔</div>
+      <h2>You're out of hearts!</h2>
+      <p>Come back later when your hearts refill, or keep practising!</p>
+      <a routerLink="/learn" class="btn-duo btn-duo-primary">Back to Dashboard</a>
+    </div>
+
+  <!-- ── Finished ──────────────────────────────────────── -->
+  } @else if (finished) {
+    <div class="result-screen">
+      <div class="result-emoji">🏆</div>
+      <h2>Chapter Complete!</h2>
+      <p class="result-chapter">{{ chapter?.title }}</p>
+      <div class="result-xp">+{{ xpEarned }} XP ⚡</div>
+      <p class="result-sub">Returning to your learning path…</p>
+      <div class="result-countdown">{{ countdown }}</div>
+      <div class="result-btns">
+        <a routerLink="/learn" class="btn-duo btn-duo-primary">Go Now →</a>
+      </div>
+    </div>
+
+  <!-- ── Active lesson ─────────────────────────────────── -->
+  } @else if (chapter) {
+
+    <!-- Header -->
+    <div class="learn-header">
+      <a routerLink="/learn" class="btn-close">✕</a>
+      <div class="learn-progress-bar">
+        <div class="lpb-fill" [style.width.%]="progress"></div>
+      </div>
+      <div class="learn-hearts">
+        @for (full of heartsArr; track $index) {
+          <span class="lheart" [class.empty]="!full">❤️</span>
+        }
+      </div>
+      <button class="btn-guidebook" (click)="showGuidebook = true" title="Guidebook">📖</button>
+    </div>
+
+    <!-- Guidebook Popup -->
+    @if (showGuidebook) {
+      <div class="guidebook-overlay" (click)="showGuidebook = false">
+        <div class="guidebook-modal" (click)="$event.stopPropagation()">
+          <div class="gb-header">
+            <div class="gb-badge" [style.background]="chapter.color">
+              {{ chapter.icon }} Chapter {{ chapter.chapterNum }}
+            </div>
+            <button class="gb-close" (click)="showGuidebook = false">✕</button>
+          </div>
+          <h2 class="gb-title">{{ chapter.title }}</h2>
+          <div class="gb-goal-label">GOAL</div>
+          <div class="gb-goal">{{ chapter.goal }}</div>
+          <div class="gb-steps-label">WHAT YOU'LL LEARN</div>
+          <div class="gb-steps-list">
+            @for (s of chapter.steps; track $index) {
+              @if (s.title) {
+                <div class="gb-step-item">
+                  <span class="gb-step-dot"></span>
+                  <span>{{ s.title }}</span>
+                </div>
+              }
+            }
+          </div>
+          <button class="btn-duo btn-duo-primary gb-done-btn" (click)="showGuidebook = false">Got it →</button>
+        </div>
+      </div>
+    }
+
+    <!-- Step area -->
+    <div class="step-area">
+
+      <!-- Step type label -->
+      <p class="step-type-label">{{ stepLabel }}</p>
+
+      <!-- ══ SHOW ══════════════════════════════════════════════ -->
+      @if (step.type === 'show') {
+        <div class="step-show">
+          <div class="chapter-badge" [style.background]="chapter.color">
+            {{ chapter.icon }} Chapter {{ chapter.chapterNum }}
+          </div>
+          <h2 class="step-heading">{{ step.title }}</h2>
+          <pre class="code-block">{{ step.code }}</pre>
+          <div class="step-label">{{ step.label }}</div>
+        </div>
+      }
+
+      <!-- ══ EXPLAIN ═══════════════════════════════════════════ -->
+      @if (step.type === 'explain') {
+        <div class="step-explain">
+          <h2 class="step-heading">{{ step.title }}</h2>
+          <pre class="code-block">{{ step.code }}</pre>
+          <ul class="explain-list">
+            @for (pt of step.points; track $index) {
+              <li class="explain-item">
+                <span class="explain-dot"></span>
+                <span>{{ pt }}</span>
+              </li>
+            }
+          </ul>
+        </div>
+      }
+
+      <!-- ══ TAP ════════════════════════════════════════════════ -->
+      @if (step.type === 'tap') {
+        <div class="step-tap">
+          <h2 class="step-heading">{{ step.question }}</h2>
+          <div class="tap-row">
+            @for (opt of step.options; track $index; let i = $index) {
+              <button
+                class="tap-btn"
+                [class]="'tap-btn ' + tapClass(i)"
+                [class.shake]="shakingIdx === i"
+                [disabled]="answered"
+                (click)="select(i)">
+                {{ opt.text }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- ══ MCQ ════════════════════════════════════════════════ -->
+      @if (step.type === 'mcq') {
+        <div class="step-mcq">
+          <h2 class="step-heading">{{ step.question }}</h2>
+          @if (step.code) {
+            <pre class="code-block">{{ step.code }}</pre>
+          }
+          <div class="options-grid">
+            @for (opt of step.options; track $index; let i = $index) {
+              <button
+                class="option-btn"
+                [class.opt-correct]="answered && opt.correct"
+                [class.opt-wrong]="answered && selectedIdx === i && !opt.correct"
+                [class.opt-selected]="!answered && selectedIdx === i"
+                [class.shake]="shakingIdx === i"
+                [disabled]="answered"
+                (click)="select(i)">
+                <span class="opt-letter">{{ 'ABCD'[i] }}</span>
+                <span class="opt-text">{{ opt.text }}</span>
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- ══ FILL ═══════════════════════════════════════════════ -->
+      @if (step.type === 'fill') {
+        <div class="step-fill">
+          <h2 class="step-heading">{{ step.title }}</h2>
+          <pre class="code-block fill-preview">{{ step.blank }}</pre>
+          <div class="fill-row">
+            <input
+              class="fill-input"
+              [class.fill-ok]="fillChecked && fillCorrect"
+              [class.fill-err]="fillChecked && !fillCorrect"
+              [(ngModel)]="fillInput"
+              [disabled]="fillChecked && fillCorrect"
+              placeholder="Type your answer…"
+              (keyup.enter)="!fillChecked ? checkFill() : null" />
+            @if (!fillChecked) {
+              <button class="btn-duo btn-duo-primary fill-check-btn" (click)="checkFill()" [disabled]="!fillInput.trim()">
+                Check
+              </button>
+            }
+          </div>
+          @if (fillChecked) {
+            @if (fillCorrect) {
+              <div class="fill-feedback fill-fb-ok">✅ Correct!</div>
+            } @else {
+              <div class="fill-feedback fill-fb-err">
+                ❌ Answer: <strong>{{ step.answer }}</strong>
+              </div>
+              <button class="btn-duo btn-duo-outline fill-retry-btn" (click)="retryFill()">
+                Try Again
+              </button>
+            }
+          }
+        </div>
+      }
+
+      <!-- ══ RULE ═══════════════════════════════════════════════ -->
+      @if (step.type === 'rule') {
+        <div class="step-rule">
+          <div class="rule-emoji">💡</div>
+          <h2 class="step-heading">{{ step.title }}</h2>
+          <div class="rule-card">{{ step.rule }}</div>
+        </div>
+      }
+
+      <!-- ══ ERROR FIX ══════════════════════════════════════════ -->
+      @if (step.type === 'error_fix') {
+        <div class="step-error">
+          <h2 class="step-heading">{{ step.question }}</h2>
+          <pre class="code-block code-broken">{{ step.brokenCode }}</pre>
+          <p class="error-pick-label">Pick what's wrong:</p>
+          <div class="error-opts">
+            @for (opt of step.options; track $index; let i = $index) {
+              <button
+                class="error-btn"
+                [class.err-correct]="answered && opt.correct"
+                [class.err-wrong]="answered && selectedIdx === i && !opt.correct"
+                [class.shake]="shakingIdx === i"
+                [disabled]="answered"
+                (click)="select(i)">
+                {{ opt.text }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- ══ FINAL ══════════════════════════════════════════════ -->
+      @if (step.type === 'final') {
+        <div class="step-final">
+          <div class="final-emoji">🎯</div>
+          <h2 class="step-heading">{{ step.title }}</h2>
+          <div class="final-task">{{ step.task }}</div>
+          <p class="final-note">Write this in your head or on paper — then tap Complete!</p>
+        </div>
+      }
+
+    </div><!-- /step-area -->
+
+    <!-- ── Feedback bar (interactive steps only) ──────── -->
+    @if (!isPassive && answered) {
+      <div class="feedback-bar" [class.fb-correct]="isCorrect" [class.fb-wrong]="!isCorrect">
+        <div class="fb-content">
+          <span class="fb-icon">{{ isCorrect ? '✅' : '❌' }}</span>
+          <div>
+            <div class="fb-title">{{ isCorrect ? 'Correct!' : 'Wrong answer' }}</div>
+            @if (!isCorrect) {
+              <div class="fb-hint">
+                Correct: <strong>
+                  @for (opt of step.options; track $index) {
+                    @if (opt.correct) { {{ opt.text }} }
+                  }
+                </strong>
+              </div>
+            }
+          </div>
+        </div>
+        <button class="btn-duo btn-duo-primary" (click)="next()">
+          {{ isLast ? 'Finish' : 'Continue' }}
+        </button>
+      </div>
+
+    <!-- ── Continue bar (passive / fill-done steps) ──── -->
+    } @else if (isPassive || (step.type === 'fill' && fillChecked)) {
+      <div class="continue-bar">
+        <button class="btn-duo btn-duo-primary continue-btn" (click)="next()" [disabled]="step.type === 'fill' && !fillCorrect">
+          {{ isLast ? '🏁 Finish Chapter' : 'Got it →' }}
+        </button>
+      </div>
+    }
+
+  }
+</div>

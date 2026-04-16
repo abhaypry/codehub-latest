@@ -1,0 +1,704 @@
+/* ══════════════════════════════════════
+   PAGE SHELL
+══════════════════════════════════════ */
+.onboard-page {
+  min-height: calc(100vh - 72px);
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+.onboard-page.fullscreen {
+  min-height: 100vh;
+}
+
+/* ══════════════════════════════════════
+   STEP 1 — COURSE SELECTION
+══════════════════════════════════════ */
+.choose-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  padding: 60px 40px 20px;
+}
+
+.choose-heading {
+  font-size: 38px;
+  font-weight: 900;
+  text-align: center;
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+
+.course-cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.course-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  width: 168px;
+  padding: 32px 20px 28px;
+  background: var(--bg2);
+  border: 2px solid var(--border);
+  border-bottom: 5px solid var(--border);
+  border-radius: 24px;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+  color: var(--text);
+  user-select: none;
+}
+.course-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--cc);
+  border-bottom-color: var(--cc);
+}
+.course-card.selected {
+  border-color: var(--cc);
+  border-bottom-color: var(--cc);
+  background: color-mix(in srgb, var(--cc) 8%, var(--bg2));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cc) 25%, transparent);
+  transform: translateY(-4px);
+}
+
+.card-icon-wrap {
+  width: 90px;
+  height: 90px;
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--cc) 15%, transparent);
+  border: 2.5px solid color-mix(in srgb, var(--cc) 35%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-lang {
+  font-size: 34px;
+  font-weight: 900;
+  font-family: 'Courier New', monospace;
+  color: var(--cc);
+  line-height: 1;
+}
+.card-name {
+  font-size: 15px;
+  font-weight: 800;
+  text-align: center;
+  color: var(--text);
+  line-height: 1.3;
+}
+.card-check {
+  position: absolute;
+  top: -10px; right: -10px;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--cc);
+  color: #0a1a14;
+  font-size: 14px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.choose-note {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+/* ══════════════════════════════════════
+   STEPS 2 & 3 — NEXA STAGE
+══════════════════════════════════════ */
+.nexa-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 40px 40px 0;
+}
+
+/* Speech bubble */
+.speech-bubble {
+  position: relative;
+  background: var(--bg3);
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  padding: 16px 28px;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 22px;
+  animation: bubble-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -14px; left: 50%;
+  transform: translateX(-50%);
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 14px solid var(--bg3);
+}
+.speech-bubble::before {
+  content: '';
+  position: absolute;
+  bottom: -17px; left: 50%;
+  transform: translateX(-50%);
+  border-left: 13px solid transparent;
+  border-right: 13px solid transparent;
+  border-top: 15px solid var(--border);
+}
+@keyframes bubble-pop {
+  from { opacity: 0; transform: scale(0.7) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Nexa avatar */
+.nexa-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: nexa-float 3.5s ease-in-out infinite;
+}
+@keyframes nexa-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-14px); }
+}
+.nexa-excited {
+  animation: nexa-bounce 0.6s ease-in-out infinite alternate;
+}
+@keyframes nexa-bounce {
+  from { transform: translateY(0) rotate(-3deg); }
+  to   { transform: translateY(-10px) rotate(3deg); }
+}
+
+/* Antenna */
+.nexa-antenna {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: -2px;
+  z-index: 2;
+}
+.antenna-stem {
+  width: 5px; height: 28px;
+  background: var(--primary-dark);
+  border-radius: 3px;
+}
+.antenna-ball {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 10px var(--primary), 0 0 20px rgba(4,232,141,0.4);
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 10px var(--primary), 0 0 20px rgba(4,232,141,0.4); }
+  50%       { box-shadow: 0 0 18px var(--primary), 0 0 36px rgba(4,232,141,0.6); }
+}
+
+/* Head */
+.nexa-head {
+  position: relative;
+  width: 180px; height: 180px;
+  background: var(--primary);
+  border-radius: 36px;
+  border: 4px solid var(--primary-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 0 var(--primary-dark), 0 14px 50px rgba(4,232,141,0.25);
+  z-index: 1;
+}
+.nexa-ear {
+  position: absolute;
+  top: 30px;
+  width: 16px; height: 40px;
+  background: var(--primary-dark);
+  border-radius: 6px;
+}
+.nexa-ear-l { left: -18px; }
+.nexa-ear-r { right: -18px; }
+
+/* Visor */
+.nexa-visor {
+  width: 130px; height: 110px;
+  background: #0a1a14;
+  border-radius: 22px;
+  border: 2px solid var(--primary-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+/* Eyes — normal */
+.nexa-eyes { display: flex; gap: 20px; }
+.nexa-eye {
+  width: 38px; height: 38px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(4,232,141,0.5);
+  animation: eye-blink 4s ease-in-out infinite;
+}
+.nexa-pupil {
+  width: 20px; height: 20px;
+  background: #0a1a14;
+  border-radius: 50%;
+  position: relative;
+}
+.nexa-pupil::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 6px; height: 6px;
+  background: white;
+  border-radius: 50%;
+}
+@keyframes eye-blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  95%            { transform: scaleY(0.1); }
+}
+
+/* Eyes — excited (star) */
+.nexa-eye-star {
+  width: 38px; height: 38px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: var(--primary);
+  box-shadow: 0 0 14px rgba(4,232,141,0.7);
+  animation: star-spin 1s ease-in-out infinite alternate;
+}
+@keyframes star-spin {
+  from { transform: scale(1); }
+  to   { transform: scale(1.15); }
+}
+
+/* Smile — normal */
+.nexa-smile {
+  width: 60px; height: 18px;
+  border-radius: 0 0 30px 30px;
+  overflow: hidden;
+  position: relative;
+}
+.nexa-smile-inner {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 36px;
+  border-radius: 50%;
+  border: 4px solid var(--primary);
+}
+
+/* Smile — excited (wider) */
+.nexa-smile-wide {
+  width: 80px; height: 24px;
+}
+
+/* Body */
+.nexa-body {
+  position: relative;
+  width: 150px; height: 80px;
+  background: var(--primary-dark);
+  border-radius: 0 0 40px 40px;
+  margin-top: -8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid var(--primary-dark);
+  border-top: none;
+  box-shadow: 0 8px 0 color-mix(in srgb, var(--primary-dark) 80%, black);
+}
+.nexa-chest-badge {
+  font-size: 18px;
+  font-weight: 900;
+  color: #0a1a14;
+  font-family: 'Courier New', monospace;
+  background: var(--primary);
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+.nexa-arm {
+  position: absolute;
+  width: 20px; height: 52px;
+  background: var(--primary);
+  border-radius: 10px;
+  border: 3px solid var(--primary-dark);
+  top: 4px;
+}
+.nexa-arm-l { left: -22px; transform: rotate(12deg); }
+.nexa-arm-r { right: -22px; transform: rotate(-12deg); }
+
+/* Raised arms for excited state */
+.nexa-arm-raised-l { top: -28px; transform: rotate(-50deg); }
+.nexa-arm-raised-r { top: -28px; transform: rotate(50deg); }
+
+/* Platform shadow */
+.nexa-platform {
+  width: 160px; height: 20px;
+  background: rgba(0,0,0,0.45);
+  border-radius: 50%;
+  filter: blur(10px);
+  margin-top: 10px;
+}
+
+/* ══════════════════════════════════════
+   STEP 4 — SURVEY
+══════════════════════════════════════ */
+.survey-page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 40px 20px;
+  gap: 40px;
+}
+
+/* Progress bar */
+.survey-progress {
+  width: 100%;
+  max-width: 860px;
+  height: 16px;
+  background: var(--bg3);
+  border-radius: 50px;
+  overflow: hidden;
+  margin-top: 28px;
+}
+.survey-progress-fill {
+  height: 100%;
+  width: 50%;
+  background: var(--primary);
+  border-radius: 50px;
+  transition: width 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+/* Nexa mini + speech bubble row */
+.survey-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 860px;
+}
+
+/* Mini Nexa avatar */
+.nexa-mini {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  animation: nexa-float 3.5s ease-in-out infinite;
+}
+.nm-antenna {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: -1px;
+}
+.nm-stem {
+  width: 3px; height: 14px;
+  background: var(--primary-dark);
+  border-radius: 2px;
+}
+.nm-ball {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 6px var(--primary);
+}
+.nm-head {
+  width: 74px; height: 74px;
+  background: var(--primary);
+  border-radius: 18px;
+  border: 3px solid var(--primary-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 5px 0 var(--primary-dark);
+}
+.nm-visor {
+  width: 52px; height: 42px;
+  background: #0a1a14;
+  border-radius: 10px;
+  border: 1.5px solid var(--primary-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nm-eyes { display: flex; gap: 10px; }
+.nm-eye {
+  width: 16px; height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nm-pupil {
+  width: 8px; height: 8px;
+  background: #0a1a14;
+  border-radius: 50%;
+}
+.nm-body {
+  width: 60px; height: 28px;
+  background: var(--primary-dark);
+  border-radius: 0 0 18px 18px;
+  margin-top: -4px;
+}
+
+/* Speech bubble (right of avatar) */
+.survey-bubble {
+  position: relative;
+  background: var(--bg3);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 14px 22px;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  animation: bubble-pop 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+.survey-bubble::before {
+  content: '';
+  position: absolute;
+  left: -15px; top: 50%;
+  transform: translateY(-50%);
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 15px solid var(--border);
+}
+.survey-bubble::after {
+  content: '';
+  position: absolute;
+  left: -12px; top: 50%;
+  transform: translateY(-50%);
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  border-right: 13px solid var(--bg3);
+}
+
+/* Option cards */
+.survey-options {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 560px;
+}
+
+.survey-option {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 24px;
+  background: var(--bg2);
+  border: 2px solid var(--border);
+  border-bottom: 4px solid var(--border);
+  border-radius: 18px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, transform 0.12s;
+  user-select: none;
+}
+.survey-option:hover {
+  border-color: var(--primary);
+  transform: translateX(4px);
+}
+.survey-option.selected {
+  border-color: var(--primary);
+  border-bottom-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 8%, var(--bg2));
+  box-shadow: 0 0 0 3px rgba(4,232,141,0.2);
+}
+
+.survey-opt-emoji { font-size: 32px; flex-shrink: 0; }
+.survey-opt-label {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+}
+.survey-opt-sub {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ── Goal options (step 6) — time left, label right ── */
+.goal-option {
+  justify-content: space-between !important;
+  gap: 0 !important;
+}
+.goal-time {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+}
+.goal-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+/* ══════════════════════════════════════
+   STEP 7 — MOTIVATION (thinking pose)
+══════════════════════════════════════ */
+.nexa-thinking {
+  animation: nexa-float 3.5s ease-in-out infinite;
+}
+.nexa-arm-pencil {
+  right: -38px !important;
+  top: -10px !important;
+  transform: rotate(-60deg) !important;
+  background: none !important;
+  border: none !important;
+  font-size: 26px;
+  width: auto !important;
+  height: auto !important;
+}
+
+/* ══════════════════════════════════════
+   STEP 8 — LOADING SCREEN
+══════════════════════════════════════ */
+.loading-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  position: relative;
+}
+
+/* Floating music notes */
+.loading-notes {
+  position: absolute;
+  top: calc(50% - 160px);
+  display: flex;
+  gap: 16px;
+}
+.note {
+  font-size: 22px;
+  animation: note-float 1.4s ease-in-out infinite;
+  opacity: 0;
+}
+.n1 { animation-delay: 0s;    }
+.n2 { animation-delay: 0.45s; }
+.n3 { animation-delay: 0.9s;  }
+@keyframes note-float {
+  0%   { opacity: 0; transform: translateY(0)    scale(0.7); }
+  30%  { opacity: 1; transform: translateY(-10px) scale(1);   }
+  100% { opacity: 0; transform: translateY(-32px) scale(0.8); }
+}
+
+/* Dancing Nexa */
+.nexa-dance {
+  animation: nexa-groove 0.7s ease-in-out infinite alternate;
+}
+@keyframes nexa-groove {
+  from { transform: rotate(-8deg) translateY(0);  }
+  to   { transform: rotate(8deg)  translateY(-8px); }
+}
+
+.nexa-arm-dance-l {
+  left: -22px;
+  transform: rotate(-50deg) !important;
+  top: -10px !important;
+}
+.nexa-arm-dance-r {
+  right: -22px;
+  transform: rotate(50deg) !important;
+  top: -10px !important;
+}
+
+/* Loading text */
+.loading-text {
+  margin-top: 24px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  animation: loading-pulse 1.2s ease-in-out infinite;
+}
+@keyframes loading-pulse {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 1;   }
+}
+
+/* ══════════════════════════════════════
+   FOOTER — all steps
+══════════════════════════════════════ */
+.onboard-footer {
+  height: 96px;
+  background: var(--bg2);
+  border-top: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  flex-shrink: 0;
+}
+
+.btn-back {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-muted);
+  background: none;
+  border: 2px solid var(--border);
+  border-bottom: 4px solid var(--border);
+  border-radius: 14px;
+  padding: 13px 36px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.btn-back:hover {
+  color: var(--text);
+  border-color: var(--text-muted);
+}
+
+.btn-action {
+  padding: 14px 48px;
+  font-size: 15px;
+  border-radius: 14px;
+  letter-spacing: 0.5px;
+}
+.btn-action:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media (max-width: 600px) {
+  .choose-heading { font-size: 28px; }
+  .course-card { width: 140px; padding: 24px 14px 20px; }
+  .card-icon-wrap { width: 74px; height: 74px; }
+  .card-lang { font-size: 28px; }
+  .nexa-head { width: 150px; height: 150px; }
+  .nexa-visor { width: 108px; height: 90px; }
+  .nexa-eye, .nexa-eye-star { width: 30px; height: 30px; }
+  .speech-bubble { font-size: 17px; padding: 14px 22px; }
+  .onboard-footer { padding: 0 20px; }
+}

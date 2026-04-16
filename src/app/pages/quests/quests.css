@@ -1,0 +1,149 @@
+.quests-layout {
+  display: flex;
+  gap: 28px;
+  max-width: 1000px;
+  align-items: flex-start;
+}
+.quests-main { flex: 1; min-width: 0; }
+.quests-loading { color: var(--text-muted); font-weight: 700; font-size: 14px; padding: 20px 0; }
+.quests-side { width: 240px; flex-shrink: 0; display: flex; flex-direction: column; gap: 14px; }
+
+/* Header */
+.quests-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.page-title { font-size: 22px; font-weight: 900; }
+.page-sub   { font-size: 13px; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+.reset-timer {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--warning);
+  background: rgba(255,200,0,0.1);
+  border: 2px solid rgba(255,200,0,0.25);
+  border-radius: 10px;
+  padding: 6px 12px;
+}
+
+/* Quest card */
+.quest-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: var(--bg2);
+  border: 2px solid var(--border);
+  border-bottom: 4px solid var(--border);
+  border-radius: 16px;
+  padding: 18px 20px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+}
+.quest-card.done { opacity: 0.6; }
+.quest-left  { display: flex; align-items: center; gap: 16px; flex: 1; min-width: 0; }
+.quest-icon  { font-size: 32px; flex-shrink: 0; }
+.quest-info  { flex: 1; min-width: 0; }
+.quest-title { font-size: 15px; font-weight: 900; margin-bottom: 2px; }
+.quest-desc  { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; }
+
+/* Progress bar */
+.quest-bar-wrap { display: flex; align-items: center; gap: 8px; }
+.quest-bar  { flex: 1; height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
+.quest-fill { height: 100%; background: var(--primary); border-radius: 4px; transition: width 0.4s; }
+.quest-count { font-size: 11px; font-weight: 800; color: var(--text-muted); white-space: nowrap; }
+
+/* Right side of card */
+.quest-right { display: flex; flex-direction: column; align-items: center; gap: 8px; flex-shrink: 0; }
+.xp-badge {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--warning);
+  background: rgba(255,200,0,0.1);
+  border: 2px solid rgba(255,200,0,0.25);
+  border-radius: 20px;
+  padding: 3px 10px;
+  white-space: nowrap;
+}
+.btn-claim {
+  padding: 8px 18px;
+  background: var(--primary);
+  color: #0a1a14;
+  font-size: 13px;
+  font-weight: 900;
+  font-family: inherit;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 0 var(--primary-dark);
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.btn-claim:active { transform: translateY(4px); box-shadow: none; }
+.btn-done {
+  padding: 8px 14px;
+  background: transparent;
+  border: 2px solid var(--primary);
+  border-radius: 10px;
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
+.btn-locked {
+  padding: 8px 10px;
+  background: var(--bg3);
+  border-radius: 10px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  text-align: center;
+}
+
+/* ── Side cards ── */
+.side-card {
+  background: var(--bg2);
+  border: 2px solid var(--border);
+  border-bottom: 4px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+/* XP earned */
+.earned-card { text-align: center; }
+.earned-icon { font-size: 36px; margin-bottom: 6px; }
+.earned-val  { font-size: 36px; font-weight: 900; color: var(--primary); line-height: 1; }
+.earned-lbl  { font-size: 12px; color: var(--text-muted); font-weight: 700; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* Weekly */
+.weekly-top   { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.weekly-icon  { font-size: 28px; }
+.weekly-badge {
+  font-size: 10px;
+  font-weight: 800;
+  background: var(--warning);
+  color: #1a1200;
+  padding: 3px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+.weekly-title { font-size: 15px; font-weight: 900; margin-bottom: 4px; }
+.weekly-desc  { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 10px; line-height: 1.4; }
+.weekly-bar-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.weekly-bar  { flex: 1; height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
+.weekly-fill { height: 100%; background: var(--warning); border-radius: 4px; transition: width 0.4s; }
+.weekly-count { font-size: 11px; font-weight: 800; color: var(--text-muted); white-space: nowrap; }
+.weekly-reward { font-size: 13px; font-weight: 800; color: var(--warning); }
+
+/* Streak */
+.streak-card .streak-row { display: flex; align-items: center; gap: 14px; }
+.streak-fire { font-size: 32px; }
+.streak-val  { font-size: 15px; font-weight: 900; margin-bottom: 3px; }
+.streak-hint { font-size: 12px; color: var(--text-muted); font-weight: 600; line-height: 1.4; }
+
+@media (max-width: 768px) {
+  .quests-layout { flex-direction: column; }
+  .quests-side { width: 100%; }
+}

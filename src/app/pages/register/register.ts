@@ -30,12 +30,12 @@ export class Register {
         this.loading = false;
         if (res.success) {
           this.auth.setUser(res.user);
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/choose']);
         } else {
           this.error = res.message;
         }
       },
-      error: () => { this.loading = false; this.error = 'Server error. Is XAMPP running?'; }
+      error: () => { this.loading = false; this.error = 'Cannot connect to server. Is XAMPP running?'; }
     });
   }
 }

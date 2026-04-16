@@ -21,19 +21,25 @@ export class Login {
 
   submit() {
     this.error = '';
-    if (!this.email || !this.password) { this.error = 'Please fill in all fields.'; return; }
+    if (!this.email || !this.password) {
+      this.error = 'Please fill in all fields.';
+      return;
+    }
     this.loading = true;
     this.api.login({ email: this.email, password: this.password }).subscribe({
       next: (res: any) => {
         this.loading = false;
         if (res.success) {
           this.auth.setUser(res.user);
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/learn']);
         } else {
-          this.error = res.message;
+          this.error = res.message || 'Invalid email or password.';
         }
       },
-      error: () => { this.loading = false; this.error = 'Server error. Is XAMPP running?'; }
+      error: () => {
+        this.loading = false;
+        this.error = 'Cannot connect to server. Is XAMPP running?';
+      }
     });
   }
 }

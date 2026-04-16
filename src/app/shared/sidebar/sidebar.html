@@ -1,0 +1,44 @@
+<aside class="left-nav">
+
+  <a routerLink="/learn" class="sidebar-logo">
+    <img src="codehub-logo.png" alt="CodeHub" class="sidebar-logo-img" />
+  </a>
+
+  <nav class="nav-list">
+
+    <a routerLink="/learn" routerLinkActive="nav-active"
+       [routerLinkActiveOptions]="{exact:true}" class="nav-link">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">LEARN</span>
+    </a>
+
+    <a routerLink="/leaderboard" routerLinkActive="nav-active" class="nav-link">
+      <span class="nav-icon">🏆</span>
+      <span class="nav-label">LEADERBOARD</span>
+    </a>
+
+    <a routerLink="/quests" routerLinkActive="nav-active" class="nav-link">
+      <span class="nav-icon">🎯</span>
+      <span class="nav-label">QUESTS</span>
+    </a>
+
+    <a routerLink="/courses" routerLinkActive="nav-active" class="nav-link">
+      <span class="nav-icon">📚</span>
+      <span class="nav-label">COURSES</span>
+    </a>
+
+    <a routerLink="/profile" routerLinkActive="nav-active" class="nav-link">
+      <span class="nav-icon">
+        @if (user?.avatar) {
+          <img [src]="avatarBase + user.avatar" class="sidebar-av-img" alt="avatar" />
+        } @else {
+          👤
+        }
+      </span>
+      <span class="nav-label">PROFILE</span>
+    </a>
+
+  </nav>
+
+
+</aside>

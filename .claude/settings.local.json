@@ -5,7 +5,18 @@
       "Bash(mv \"E:/College 8/codehub-Final/CLAUDE.md\" \"E:/College 8/codehub-Final/codehub/CLAUDE.md\")",
       "Bash(mv \"E:/College 8/codehub-Final/.claude\" \"E:/College 8/codehub-Final/codehub/.claude\")",
       "WebFetch(domain:www.duolingo.com)",
-      "Bash(npx ng:*)"
+      "Bash(npx ng:*)",
+      "Bash(taskkill /F /IM node.exe)",
+      "Bash(npx ng *)",
+      "Read(//tmp/**)",
+      "Bash(cp \"D:/Profile photos/boy/ChatGPT Image Apr 15, 2026, 04_01_38 PM.png\" \"C:/xampp/htdocs/codehub-api/avatars/boy/boy1.png\")",
+      "Bash(cp \"D:/Profile photos/boy/ChatGPT Image Apr 15, 2026, 04_02_59 PM.png\" \"C:/xampp/htdocs/codehub-api/avatars/boy/boy2.png\")",
+      "Bash(cp \"D:/Profile photos/boy/profile 1.png\" \"C:/xampp/htdocs/codehub-api/avatars/boy/boy3.png\")",
+      "Bash(cp \"D:/Profile photos/girl/ChatGPT Image Apr 15, 2026, 04_05_11 PM.png\" \"C:/xampp/htdocs/codehub-api/avatars/girl/girl1.png\")",
+      "Bash(cp \"D:/Profile photos/girl/ChatGPT Image Apr 15, 2026, 04_06_32 PM.png\" \"C:/xampp/htdocs/codehub-api/avatars/girl/girl2.png\")",
+      "Read(//c/xampp/mysql/bin/**)",
+      "Bash(./mysql.exe -u root -e \"ALTER TABLE codehub.users ADD COLUMN IF NOT EXISTS avatar VARCHAR\\(60\\) DEFAULT NULL;\")",
+      "Bash(ng serve *)"
     ]
   }
 }

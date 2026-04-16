@@ -1,66 +1,222 @@
-<app-navbar></app-navbar>
+<div class="app-layout">
+  <app-sidebar></app-sidebar>
+  <div class="page-content">
 
-<div class="page">
-  @if (loading) {
-    <div class="loading">Loading...</div>
-  } @else if (profile) {
-    <div class="profile-top">
-      <div class="profile-avatar">{{ profile.name[0].toUpperCase() }}</div>
-      <div class="profile-meta">
-        <h1>{{ profile.name }}</h1>
-        <p class="profile-email">{{ profile.email }}</p>
-        <p class="profile-join">Member since {{ joinDate }}</p>
-      </div>
-    </div>
+    @if (saveError) {
+      <div class="save-error-toast">{{ saveError }}</div>
+    }
 
-    <div class="stats-grid">
-      <div class="stat-box">
-        <div class="stat-emoji">🔥</div>
-        <div class="stat-val">{{ profile.streak }}</div>
-        <div class="stat-lbl">Streak</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-emoji">⚡</div>
-        <div class="stat-val">{{ profile.xp }}</div>
-        <div class="stat-lbl">Total XP</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-emoji">🎯</div>
-        <div class="stat-val">{{ level }}</div>
-        <div class="stat-lbl">Level</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-emoji">📚</div>
-        <div class="stat-val">{{ profile.completed_lessons }}</div>
-        <div class="stat-lbl">Lessons</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-emoji">🏆</div>
-        <div class="stat-val">#{{ profile.rank }}</div>
-        <div class="stat-lbl">Rank</div>
-      </div>
-    </div>
+    @if (profile) {
+      <div class="profile-layout">
 
-    <div class="level-card">
-      <div class="level-header">
-        <span class="level-title">Level {{ level }}</span>
-        <span class="level-sub">{{ xpInLevel }} / 100 XP</span>
-      </div>
-      <div class="level-bar">
-        <div class="level-fill" [style.width.%]="xpInLevel"></div>
-      </div>
-      <p class="level-hint">{{ 100 - xpInLevel }} XP to reach Level {{ level + 1 }}</p>
-    </div>
+        <!-- ── LEFT ── -->
+        <div class="profile-main">
 
-    <div class="badges-section">
-      <h3>Badges</h3>
-      <div class="badges-row">
-        <div class="badge-item">🔥</div>
-        <div class="badge-item">⚡</div>
-        <div class="badge-item locked-badge">🔒</div>
-        <div class="badge-item locked-badge">🔒</div>
-        <div class="badge-item locked-badge">🔒</div>
+          <!-- Banner card with avatar overlapping bottom-left -->
+          <div class="profile-banner" [style.backgroundImage]="currentBannerUrl ? 'url(' + currentBannerUrl + ')' : ''">
+            <button class="edit-btn" (click)="openBannerEdit()" title="Change banner">✎</button>
+            <div class="avatar-wrapper">
+              <div class="avatar-circle" (click)="openPreview()" [class.clickable]="currentAvatarUrl">
+                @if (currentAvatarUrl) {
+                  <img [src]="currentAvatarUrl" alt="avatar" class="avatar-img" />
+                } @else {
+                  {{ profile.name.charAt(0) }}
+                }
+              </div>
+              <button class="avatar-edit-btn" (click)="openEdit()" title="Change avatar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Identity -->
+          <div class="profile-identity">
+            <h1 class="p-name">{{ profile.name.split(' ')[0] }}</h1>
+            <p class="p-username">@{{ profile.name.toLowerCase().replace(' ','') }}</p>
+            <p class="p-join">Join {{ joinDate }}</p>
+            <div class="p-social">
+              <span><strong>0</strong> following</span>
+              <span><strong>0</strong> followers</span>
+            </div>
+            <div class="flag-row">
+              <span class="flag-badge">🐍</span>
+              <span class="flag-badge">☕</span>
+              <span class="flag-badge">🌐</span>
+            </div>
+          </div>
+
+          <!-- Statistics -->
+          <div class="section-block">
+            <h2 class="section-title">statistics</h2>
+            <div class="stats-grid">
+
+              <div class="stat-card">
+                <span class="sc-icon">🔥</span>
+                <div>
+                  <div class="sc-val">{{ profile.streak }}</div>
+                  <div class="sc-lbl">Streak of the day</div>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <span class="sc-icon bolt">⚡</span>
+                <div>
+                  <div class="sc-val">{{ profile.xp }}</div>
+                  <div class="sc-lbl">Total Points</div>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <span class="sc-icon">💎</span>
+                <div>
+                  <div class="sc-val">Sapphire <span class="streak-tag">{{ profile.streak }} STREAK</span></div>
+                  <div class="sc-lbl">The current league</div>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <span class="sc-icon">🏆</span>
+                <div>
+                  <div class="sc-val">{{ profile.rank }}</div>
+                  <div class="sc-lbl">Be included in the top 5</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Achievements -->
+          <div class="section-block">
+            <div class="section-header">
+              <h2 class="section-title">achievements</h2>
+              <a class="see-all">SEE ALL</a>
+            </div>
+            <div class="ach-row">
+              <div class="ach-item"><div class="ach-icon">🔥</div><div class="ach-lbl">Streak</div></div>
+              <div class="ach-item"><div class="ach-icon">⚡</div><div class="ach-lbl">XP</div></div>
+              <div class="ach-item locked"><div class="ach-icon">🏆</div><div class="ach-lbl">Top 3</div></div>
+              <div class="ach-item locked"><div class="ach-icon">💎</div><div class="ach-lbl">Diamond</div></div>
+              <div class="ach-item locked"><div class="ach-icon">🎯</div><div class="ach-lbl">Perfect</div></div>
+            </div>
+          </div>
+
+          <button class="logout-btn" (click)="logout()">LOG OUT</button>
+
+        </div>
+
+        <!-- ── RIGHT: social panel ── -->
+        <div class="social-panel">
+
+          <div class="follow-tabs">
+            <button class="ftab active">FOLLOWING</button>
+            <button class="ftab">FOLLOWERS</button>
+          </div>
+
+          <div class="social-card">
+            <div class="social-illustration">👥</div>
+            <p class="social-msg">Learning is more fun and effective when you connect with people.</p>
+          </div>
+
+          <div class="friends-section">
+            <h3 class="friends-title">Make friends</h3>
+            <div class="friend-row">
+              <div class="friend-icon">🔍</div>
+              <span class="friend-label">find a friend</span>
+              <span class="friend-arrow">›</span>
+            </div>
+            <div class="friend-row">
+              <div class="friend-icon">📨</div>
+              <span class="friend-label">Invite friends</span>
+              <span class="friend-arrow">›</span>
+            </div>
+          </div>
+
+        </div>
+
       </div>
-    </div>
-  }
+    }
+
+    <!-- ── Avatar Preview Popup ── -->
+    @if (previewOpen) {
+      <div class="modal-overlay" (click)="closePreview()">
+        <div class="preview-box" (click)="$event.stopPropagation()">
+          <button class="modal-close preview-close" (click)="closePreview()">✕</button>
+          <img [src]="currentAvatarUrl" alt="avatar" class="preview-img" />
+          <p class="preview-name">{{ profile.name }}</p>
+        </div>
+      </div>
+    }
+
+    <!-- ── Banner Picker Modal ── -->
+    @if (bannerEditOpen) {
+      <div class="modal-overlay" (click)="closeBannerEdit()">
+        <div class="modal-box" (click)="$event.stopPropagation()">
+
+          <div class="modal-header">
+            <h2 class="modal-title">Choose your banner</h2>
+            <button class="modal-close" (click)="closeBannerEdit()">✕</button>
+          </div>
+
+          <div class="banner-grid">
+            @for (bn of banners; track bn) {
+              <div class="bn-option" [class.selected]="selectedBanner === bn" (click)="selectBanner(bn)">
+                <img [src]="'http://localhost/codehub-api/' + bn" [alt]="bn" class="bn-img" />
+                @if (selectedBanner === bn) {
+                  <div class="bn-check">✓</div>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn-duo btn-duo-outline" (click)="closeBannerEdit()">CANCEL</button>
+            <button class="btn-duo btn-duo-primary" (click)="saveBanner()" [disabled]="!selectedBanner">SAVE</button>
+          </div>
+
+        </div>
+      </div>
+    }
+
+    <!-- ── Avatar Picker Modal ── -->
+    @if (editOpen) {
+      <div class="modal-overlay" (click)="closeEdit()">
+        <div class="modal-box" (click)="$event.stopPropagation()">
+
+          <div class="modal-header">
+            <h2 class="modal-title">Choose your avatar</h2>
+            <button class="modal-close" (click)="closeEdit()">✕</button>
+          </div>
+
+          <!-- Gender tabs -->
+          <div class="gender-tabs">
+            <button class="gtab" [class.active]="pickerGender === 'boy'"  (click)="pickerGender = 'boy'">Boy</button>
+            <button class="gtab" [class.active]="pickerGender === 'girl'" (click)="pickerGender = 'girl'">Girl</button>
+          </div>
+
+          <!-- Avatar grid -->
+          <div class="avatar-grid">
+            @for (av of pickerList; track av) {
+              <div class="av-option" [class.selected]="selectedAvatar === av" (click)="selectAvatar(av)">
+                <img [src]="mediaUrl(av)" [alt]="av" class="av-img" />
+                @if (selectedAvatar === av) {
+                  <div class="av-check">✓</div>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Actions -->
+          <div class="modal-actions">
+            <button class="btn-duo btn-duo-outline" (click)="closeEdit()">CANCEL</button>
+            <button class="btn-duo btn-duo-primary" (click)="saveAvatar()" [disabled]="!selectedAvatar">SAVE</button>
+          </div>
+
+        </div>
+      </div>
+    }
+
+  </div>
 </div>

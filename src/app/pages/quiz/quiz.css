@@ -98,6 +98,51 @@
   margin-bottom: 32px;
 }
 
+/* Pattern table */
+.pattern-table {
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.pattern-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 2px solid var(--border);
+}
+.pattern-row:last-child { border-bottom: none; }
+
+.pattern-cell {
+  padding: 16px 20px;
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+}
+.code-cell {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  color: var(--text-muted);
+  background: var(--bg2);
+  border-right: 2px solid var(--border);
+}
+.ans-cell {
+  background: var(--bg3);
+  justify-content: center;
+  font-weight: 800;
+  font-size: 16px;
+}
+.ans-blank {
+  color: var(--primary);
+  font-size: 22px;
+  font-weight: 900;
+  border: 2px solid var(--primary);
+  background: var(--primary-light);
+}
+.ans-filled {
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
 /* Options */
 .options-grid {
   display: grid;
@@ -182,6 +227,10 @@
   background: rgba(255,75,75,0.1);
   border-top-color: var(--danger);
 }
+.fb-neutral {
+  background: var(--bg2);
+  border-top-color: var(--border);
+}
 
 .fb-content { display: flex; align-items: center; gap: 12px; }
 .fb-icon { font-size: 24px; }
@@ -213,6 +262,28 @@
   font-weight: 900;
 }
 .result-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
+.result-fail {
+  color: var(--danger);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.opt-selected {
+  border-color: var(--primary) !important;
+  border-bottom-color: var(--primary-dark) !important;
+  background: var(--primary-light) !important;
+}
+.opt-selected .opt-letter { background: var(--primary); color: #0a1a14; }
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25%       { transform: translateX(-8px); }
+  75%       { transform: translateX(8px); }
+}
 
 @media (max-width: 600px) {
   .options-grid { grid-template-columns: 1fr; }

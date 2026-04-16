@@ -1,0 +1,144 @@
+@if (step === 1) {
+  <app-navbar></app-navbar>
+}
+
+<div class="onboard-page" [class.fullscreen]="step > 1">
+
+  <!-- ══ STEP 1: Pick a course ══ -->
+  @if (step === 1) {
+    <div class="choose-content">
+      <h1 class="choose-heading">What would you like to learn?</h1>
+      <div class="course-cards">
+        @for (c of courses; track c.id) {
+          <div class="course-card" [class.selected]="isCourseSelected(c.id)" [style.--cc]="c.color" (click)="toggleCourse(c.id)">
+            <div class="card-icon-wrap">
+              <span class="card-lang" [style.font-size]="c.fontSize">{{ c.lang }}</span>
+            </div>
+            <p class="card-name">{{ c.name }}</p>
+            @if (isCourseSelected(c.id)) { <div class="card-check">✓</div> }
+          </div>
+        }
+      </div>
+      <p class="choose-note">More courses coming soon</p>
+    </div>
+  }
+
+  <!-- ══ STEP 2: Meet Nexa ══ -->
+  @if (step === 2) {
+    <div class="nexa-stage">
+      <div class="speech-bubble">Hi there! I'm Nexa!</div>
+      <app-nexa-rive [size]="260"></app-nexa-rive>
+    </div>
+  }
+
+  <!-- ══ STEP 3: Let's go! ══ -->
+  @if (step === 3) {
+    <div class="nexa-stage">
+      <div class="speech-bubble">Let's get this party started!</div>
+      <app-nexa-rive [size]="260"></app-nexa-rive>
+    </div>
+  }
+
+  <!-- ══ STEP 4: Coding level ══ -->
+  @if (step === 4) {
+    <div class="survey-page">
+      <div class="survey-progress"><div class="survey-progress-fill" [style.width.%]="surveyProgress"></div></div>
+      <div class="survey-header">
+        <app-nexa-rive [size]="72"></app-nexa-rive>
+        <div class="survey-bubble">Where are you in your coding journey?</div>
+      </div>
+      <div class="survey-options">
+        @for (lv of levels; track lv.id) {
+          <div class="survey-option" [class.selected]="selectedLevel === lv.id" (click)="selectLevel(lv.id)">
+            <span class="survey-opt-emoji">{{ lv.emoji }}</span>
+            <div class="survey-opt-text">
+              <p class="survey-opt-label">{{ lv.label }}</p>
+              <p class="survey-opt-sub">{{ lv.sub }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- ══ STEP 5: Education ══ -->
+  @if (step === 5) {
+    <div class="survey-page">
+      <div class="survey-progress"><div class="survey-progress-fill" [style.width.%]="surveyProgress"></div></div>
+      <div class="survey-header">
+        <app-nexa-rive [size]="72"></app-nexa-rive>
+        <div class="survey-bubble">What's your education background?</div>
+      </div>
+      <div class="survey-options">
+        @for (ed of educations; track ed.id) {
+          <div class="survey-option" [class.selected]="selectedEdu === ed.id" (click)="selectEdu(ed.id)">
+            <span class="survey-opt-emoji">{{ ed.emoji }}</span>
+            <div class="survey-opt-text">
+              <p class="survey-opt-label">{{ ed.label }}</p>
+              <p class="survey-opt-sub">{{ ed.sub }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- ══ STEP 6: Daily goal ══ -->
+  @if (step === 6) {
+    <div class="survey-page">
+      <div class="survey-progress"><div class="survey-progress-fill" [style.width.%]="surveyProgress"></div></div>
+      <div class="survey-header">
+        <app-nexa-rive [size]="72"></app-nexa-rive>
+        <div class="survey-bubble">What's your daily learning goal?</div>
+      </div>
+      <div class="survey-options">
+        @for (g of goals; track g.id) {
+          <div class="survey-option goal-option" [class.selected]="selectedGoal === g.id" (click)="selectGoal(g.id)">
+            <p class="goal-time">{{ g.time }}</p>
+            <p class="goal-label">{{ g.label }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- ══ STEP 7: Motivation message ══ -->
+  @if (step === 7) {
+    <div class="nexa-stage">
+      <div class="speech-bubble">It can be hard to stay motivated...</div>
+      <app-nexa-rive [size]="260"></app-nexa-rive>
+    </div>
+  }
+
+  <!-- ══ STEP 8: Loading ══ -->
+  @if (step === 8) {
+    <div class="loading-stage">
+      <div class="loading-notes">
+        <span class="note n1">🎵</span>
+        <span class="note n2">🎵</span>
+        <span class="note n3">🎵</span>
+      </div>
+      <app-nexa-rive [size]="260"></app-nexa-rive>
+      <p class="loading-text">LOADING...</p>
+    </div>
+  }
+
+  <!-- ══ Footer (hidden on step 8) ══ -->
+  @if (step !== 8) {
+    <div class="onboard-footer">
+      <button class="btn-back" (click)="back()">BACK</button>
+      @if (step === 1) {
+        <button class="btn-duo btn-duo-primary btn-action" [disabled]="selectedIds.size === 0"   (click)="goNext()">NEXT</button>
+      } @else if (step === 4) {
+        <button class="btn-duo btn-duo-primary btn-action" [disabled]="selectedLevel === null" (click)="goNext()">CONTINUE</button>
+      } @else if (step === 5) {
+        <button class="btn-duo btn-duo-primary btn-action" [disabled]="selectedEdu === null"   (click)="goNext()">CONTINUE</button>
+      } @else if (step === 6) {
+        <button class="btn-duo btn-duo-primary btn-action" [disabled]="selectedGoal === null"  (click)="goNext()">CONTINUE</button>
+      } @else {
+        <button class="btn-duo btn-duo-primary btn-action" (click)="goNext()">CONTINUE</button>
+      }
+    </div>
+  }
+
+</div>

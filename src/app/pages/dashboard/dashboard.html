@@ -1,96 +1,235 @@
-<app-navbar></app-navbar>
+<div class="dash-layout" [style.--tc]="selectedCourse?.color">
 
-<div class="dash-layout">
-  <!-- Left sidebar -->
-  <aside class="sidebar">
-    <div class="user-card">
-      <div class="user-avatar">{{ user?.name?.[0]?.toUpperCase() }}</div>
-      <div class="user-info">
-        <div class="user-name">{{ user?.name }}</div>
-        <div class="user-level">Level {{ level }}</div>
-      </div>
-    </div>
+  <app-sidebar></app-sidebar>
 
-    <div class="xp-card">
-      <div class="xp-row">
-        <span>⚡ XP</span>
-        <span class="xp-val">{{ user?.xp || 0 }}</span>
-      </div>
-      <div class="xp-bar">
-        <div class="xp-fill" [style.width.%]="xpInLevel"></div>
-      </div>
-      <div class="xp-hint">{{ xpInLevel }}/100 to Level {{ level + 1 }}</div>
-    </div>
-
-    <div class="streak-card">
-      <span class="streak-fire">🔥</span>
-      <div>
-        <div class="streak-num">{{ user?.streak || 0 }}</div>
-        <div class="streak-lbl">Day Streak</div>
-      </div>
-    </div>
-
-    <!-- Course tabs -->
-    <div class="course-tabs">
-      <p class="tabs-label">Courses</p>
-      @for (course of courses; track course.id) {
-        <button
-          class="course-tab"
-          [class.active]="selectedCourse?.id === course.id"
-          (click)="selectCourse(course)">
-          <span class="tab-dot" [style.background]="course.color"></span>
-          {{ course.title }}
-        </button>
-      }
-    </div>
-  </aside>
-
-  <!-- Main path -->
+  <!-- ══ MAIN PATH AREA ══ -->
   <main class="path-area">
-    @if (loading) {
-      <div class="path-loading">Loading lessons...</div>
+    @if (noCoursesEnrolled) {
+      <div class="no-courses-state">
+        <div class="no-courses-icon">📚</div>
+        <h2 class="no-courses-title">No courses enrolled yet!</h2>
+        <p class="no-courses-sub">Pick the languages you want to learn and start your coding journey.</p>
+        <a routerLink="/choose" class="btn-duo btn-duo-primary">Choose Your Courses</a>
+      </div>
     } @else {
-      <!-- Section banner -->
-      <div class="section-banner" [style.background]="selectedCourse?.color">
-        <span class="banner-label">Unit 1</span>
-        <span class="banner-title">{{ selectedCourse?.title }}</span>
-        <span class="banner-desc">{{ selectedCourse?.description }}</span>
+
+      <!-- Course selector tabs -->
+      <div class="course-tabs">
+        <button class="course-tab active" [style.--tc]="selectedCourse?.color">
+          {{ selectedCourse?.title }}
+        </button>
+        <div class="course-add-wrap">
+          <button class="course-tab-add" title="Switch course" (click)="showCoursePopup = !showCoursePopup">+</button>
+          @if (showCoursePopup) {
+            <div class="course-popup">
+              <p class="course-popup-title">Switch Course</p>
+              @for (course of courses; track course.id) {
+                <button
+                  class="course-popup-item"
+                  [class.selected]="selectedCourse?.id === course.id"
+                  [style.--tc]="course.color"
+                  (click)="selectCourse(course)">
+                  <span class="cpi-dot" [style.background]="course.color"></span>
+                  {{ course.title }}
+                  @if (selectedCourse?.id === course.id) { <span class="cpi-check">✓</span> }
+                </button>
+              }
+              <div class="cpi-divider"></div>
+              <a routerLink="/choose" class="course-popup-add-btn" (click)="showCoursePopup = false">
+                <span class="cpi-plus">+</span>
+                Add new course
+              </a>
+            </div>
+            <div class="course-popup-backdrop" (click)="showCoursePopup = false"></div>
+          }
+        </div>
       </div>
 
-      <!-- Winding path -->
-      <div class="path">
-        @for (node of pathNodes; track node.id) {
-          <div class="path-row" [attr.data-pos]="node.pos">
-            @if (node.state === 'active') {
-              <div class="node-wrapper active-wrapper">
-                <div class="node-tooltip">START</div>
-                <a [routerLink]="['/lessons', node.id, 'quiz']" class="node node-active">
-                  <span class="node-icon">▶</span>
-                </a>
-                <div class="node-title">{{ node.title }}</div>
+      <!-- Section banner -->
+      <div class="section-banner" [style.background]="selectedCourse?.color" [style.box-shadow]="'0 6px 0 ' + selectedCourse?.colorDark">
+        <div class="banner-inner">
+          <div class="banner-text">
+            <p class="banner-unit">← UNIT 1 · {{ selectedCourse?.title | uppercase }}</p>
+            <p class="banner-title">{{ selectedCourse?.description }}</p>
+          </div>
+          <button class="banner-guide-btn" (click)="showGuidebook = true">GUIDEBOOK</button>
+        </div>
+      </div>
+
+      <!-- Guidebook popup -->
+      @if (showGuidebook) {
+        <div class="gb-overlay" (click)="showGuidebook = false">
+          <div class="gb-modal" (click)="$event.stopPropagation()">
+            <div class="gb-modal-header">
+              <div class="gb-course-badge" [style.background]="selectedCourse?.color">
+                {{ courseEmoji(selectedCourse?.icon) }} {{ selectedCourse?.title }}
               </div>
+              <button class="gb-modal-close" (click)="showGuidebook = false">✕</button>
+            </div>
+            <p class="gb-modal-desc">{{ selectedCourse?.description }}</p>
+
+            <div class="gb-guide-cards">
+              <div class="gb-guide-card">
+                <span class="gb-guide-icon">🗺️</span>
+                <div>
+                  <p class="gb-guide-title">How this unit works</p>
+                  <p class="gb-guide-body">Each lesson builds on the last. Complete lessons in order to unlock new ones. Earn XP for every lesson you finish and climb the leaderboard!</p>
+                </div>
+              </div>
+              <div class="gb-guide-card">
+                <span class="gb-guide-icon">💡</span>
+                <div>
+                  <p class="gb-guide-title">Tips for success</p>
+                  <p class="gb-guide-body">Don't rush — read every explanation carefully. Wrong answers cost a heart, so think before you pick. Come back daily to keep your streak alive!</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="gb-section-label">LESSONS IN THIS UNIT</div>
+            <div class="gb-lesson-list">
+              @for (node of pathNodes; track node.id; let i = $index) {
+                <div class="gb-lesson-row" [class.gb-done]="node.state === 'done'" [class.gb-locked]="node.state === 'locked'">
+                  <span class="gb-lesson-num">{{ i + 1 }}</span>
+                  <span class="gb-lesson-title">{{ node.title }}</span>
+                  <span class="gb-lesson-state">
+                    @if (node.state === 'done')   { ✅ }
+                    @if (node.state === 'active') { ⭐ }
+                    @if (node.state === 'locked') { 🔒 }
+                  </span>
+                </div>
+              }
+            </div>
+
+            <button class="btn-duo btn-duo-primary gb-modal-cta" (click)="showGuidebook = false">Got it →</button>
+          </div>
+        </div>
+      }
+
+      <!-- Winding lesson path -->
+      <div class="path" [style.--nc]="selectedCourse?.color" [style.--nc-dark]="selectedCourse?.colorDark">
+        @for (node of pathNodes; track node.id; let i = $index) {
+
+          @if (i > 0) {
+            <div class="road-connector">
+              <svg class="road-svg" viewBox="0 0 500 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <path [attr.d]="getRoadPath(pathNodes[i-1].pos, node.pos)"
+                      stroke="#3a3a3a" stroke-width="28" fill="none" stroke-linecap="round"/>
+                <path [attr.d]="getRoadPath(pathNodes[i-1].pos, node.pos)"
+                      stroke="#ffc800" stroke-width="2.5" fill="none" stroke-linecap="round"
+                      stroke-dasharray="18 14" opacity="0.5"/>
+              </svg>
+            </div>
+          }
+
+          <div class="path-row" [attr.data-pos]="node.pos">
+
+            @if (node.state === 'active') {
+              <div class="node-wrapper">
+                <div class="start-chip">START</div>
+                <a [routerLink]="['/lessons', node.id, 'learn']" [queryParams]="{course_id: selectedCourse?.id, order: node.order_num}" class="node node-active">
+                  <span class="node-icon">⭐</span>
+                  <div class="node-xp-badge active-badge">+{{ node.xp_reward }} XP</div>
+                </a>
+                <div class="node-label active-label">{{ node.title }}</div>
+              </div>
+
             } @else if (node.state === 'done') {
               <div class="node-wrapper">
-                <a [routerLink]="['/lessons', node.id, 'quiz']" class="node node-done">
-                  <span class="node-icon">✓</span>
+                <a [routerLink]="['/lessons', node.id, 'learn']" [queryParams]="{course_id: selectedCourse?.id, order: node.order_num}" class="node node-done">
+                  <span class="node-icon">⭐</span>
+                  <div class="node-xp-badge done-badge">+{{ node.xp_reward }} XP</div>
                 </a>
-                <div class="node-title done-title">{{ node.title }}</div>
+                <div class="node-label done-label">{{ node.title }}</div>
               </div>
+
             } @else {
               <div class="node-wrapper">
                 <div class="node node-locked">
-                  <span class="node-icon">🔒</span>
+                  <span class="node-icon">⭐</span>
+                  <div class="node-xp-badge locked-badge">+{{ node.xp_reward }} XP</div>
                 </div>
-                <div class="node-title locked-title">{{ node.title }}</div>
+                <div class="node-label locked-label">{{ node.title }}</div>
               </div>
             }
+
           </div>
         }
-
-        @if (pathNodes.length === 0) {
-          <div class="path-empty">No lessons yet. Check back soon!</div>
+        @if (!lessonsLoading && pathNodes.length === 0) {
+          <div class="path-empty">No lessons available.</div>
         }
       </div>
+
     }
   </main>
+
+  <!-- ══ RIGHT PANEL ══ -->
+  <aside class="right-panel">
+
+    <!-- Stats row -->
+    <div class="rp-stats">
+      <div class="rp-stat">
+        <span class="rp-icon">🏆</span>
+        <span class="rp-val trophy-rank">#{{ userRank || '?' }}</span>
+      </div>
+      <div class="rp-stat">
+        <span class="rp-icon fire-icon">🔥</span>
+        <span class="rp-val orange">{{ user?.streak || 0 }}</span>
+      </div>
+      <div class="rp-stat">
+        <span class="rp-icon gem-icon">💎</span>
+        <span class="rp-val blue">{{ user?.xp || 0 }}</span>
+      </div>
+      <div class="rp-stat">
+        <span class="rp-icon">❤️</span>
+        <span class="rp-val red">{{ user?.hearts || 0 }}</span>
+      </div>
+    </div>
+
+    <!-- PRO card -->
+    <div class="pro-card">
+      <div class="pro-card-top">
+        <div class="pro-card-left">
+          <div class="pro-badge">PRO</div>
+          <p class="pro-title">Try Pro for free</p>
+          <p class="pro-desc">Get rid of ads, special practice sessions, and unlimited access to amazing levels!</p>
+        </div>
+        <div class="pro-mascot">🤖</div>
+      </div>
+      <a routerLink="/courses" class="pro-btn">TRY 1 WEEK FREE</a>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="rp-card">
+      <div class="rp-card-header">
+        <span class="rp-card-title">Leaderboard</span>
+        <a routerLink="/leaderboard" class="rp-card-link">SEE THE LEAGUE</a>
+      </div>
+      <div class="rp-card-body">
+        <div class="lb-rank-badge">#{{ userRank || '?' }}</div>
+        <div class="lb-info">
+          <p class="lb-main">You got <span class="lb-rank">rank {{ userRank || '?' }}</span></p>
+          <p class="lb-sub">Keep earning XP to climb higher!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Daily Target -->
+    <div class="rp-card">
+      <div class="rp-card-header">
+        <span class="rp-card-title">Daily Target</span>
+        <a routerLink="/profile" class="rp-card-link">SEE ALL</a>
+      </div>
+      <div class="rp-card-body">
+        <span class="dt-bolt">⚡</span>
+        <div class="dt-info">
+          <p class="dt-label">get {{ dailyXpGoal }} points</p>
+          <div class="dt-bar"><div class="dt-bar-fill" [style.width.%]="dailyXpProgress"></div></div>
+          <p class="dt-count">{{ dailyXp }} / {{ dailyXpGoal }}</p>
+        </div>
+        <span class="dt-chest">🎁</span>
+      </div>
+    </div>
+
+  </aside>
+
 </div>

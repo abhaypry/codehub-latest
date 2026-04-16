@@ -1,5 +1,6 @@
-<app-navbar></app-navbar>
-
+<div class="app-layout">
+<app-sidebar></app-sidebar>
+<div class="page-content">
 <div class="page">
   <div class="page-header">
     <h1>All Courses</h1>
@@ -8,7 +9,7 @@
 
   <div class="courses-grid">
     @for (course of courses; track course.id) {
-      <a [routerLink]="['/courses', course.id, 'lessons']" class="course-card">
+      <div class="course-card">
         <div class="course-banner" [style.background]="course.color">
           <div class="course-letter">{{ course.title[0] }}</div>
         </div>
@@ -19,9 +20,15 @@
             <span>📚 {{ course.lessons }} lessons</span>
             <span>👥 {{ course.students | number }} students</span>
           </div>
-          <button class="btn-duo btn-duo-primary course-btn">Start →</button>
+          <button class="btn-duo btn-duo-primary course-btn"
+                  [disabled]="starting === course.id"
+                  (click)="startCourse(course)">
+            {{ starting === course.id ? 'Loading…' : 'Start →' }}
+          </button>
         </div>
-      </a>
+      </div>
     }
   </div>
+</div>
+</div>
 </div>

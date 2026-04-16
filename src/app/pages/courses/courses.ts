@@ -1,21 +1,53 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { Navbar } from '../../shared/navbar/navbar';
+import { RouterLink, Router } from '@angular/router';
+import { Api } from '../../services/api';
+import { Auth } from '../../services/auth';
+import { Sidebar } from '../../shared/sidebar/sidebar';
 
 @Component({
   selector: 'app-courses',
-  imports: [CommonModule, RouterLink, Navbar],
+  imports: [CommonModule, RouterLink, Sidebar],
   templateUrl: './courses.html',
   styleUrl: './courses.css'
 })
-export class Courses {
-  loading = false;
+export class Courses implements OnInit {
+  courses: any[] = [];
+  starting: number | null = null;
 
-  courses = [
-    { id: 1, title: 'C Programming',   description: 'Master the foundational language of computing. Learn memory, pointers & more.',  color: '#04e88d', lessons: 8,  students: 1240 },
-    { id: 2, title: 'C++ Programming', description: 'Build on C with object-oriented programming, templates and the STL.',             color: '#7B68EE', lessons: 10, students: 980  },
-    { id: 3, title: 'Java',            description: 'Write once, run anywhere. Learn OOP, collections and Android basics.',            color: '#ffc800', lessons: 12, students: 1560 },
-    { id: 4, title: 'C#',             description: 'Microsoft\'s modern language for .NET apps, games with Unity and more.',          color: '#ff6b6b', lessons: 9,  students: 720  },
-  ];
+  constructor(private api: Api, private auth: Auth, private router: Router) {}
+
+  ngOnInit() {
+    const cached = this.auth.getCache('courses');
+    if (cached) this.courses = cached;
+
+    this.api.getCourses().subscribe({
+      next: (res: any) => {
+        if (res.success) {
+          this.courses = res.courses || [];
+          this.auth.setCache('courses', this.courses);
+        }
+      },
+      error: () => {}
+    });
+  }
+
+  startCourse(course: any) {
+    const userId = this.auth.getUser()?.id;
+    if (!userId) { this.router.navigate(['/login']); return; }
+
+    this.starting = course.id;
+
+    // Enroll if not already, then go to /learn with this course selected
+    this.api.enrollCourses(userId, [course.id]).subscribe({
+      next: () => {
+        // Store full course object so dashboard can show it instantly
+        this.auth.setCache('preferred_course_' + userId, course);
+        this.router.navigate(['/learn']);
+      },
+      error: () => {
+        this.starting = null;
+      }
+    });
+  }
 }

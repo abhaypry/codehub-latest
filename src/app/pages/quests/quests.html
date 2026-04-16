@@ -1,0 +1,92 @@
+<div class="app-layout">
+  <app-sidebar></app-sidebar>
+  <div class="page-content">
+    <div class="quests-layout">
+
+      <!-- ── LEFT: Daily quests ── -->
+      <div class="quests-main">
+
+        <div class="quests-header">
+          <div>
+            <h1 class="page-title">Daily Quests</h1>
+            <p class="page-sub">Resets at midnight · Earn bonus XP</p>
+          </div>
+          <div class="reset-timer">⏰ {{ timerDisplay }}</div>
+        </div>
+
+        @for (q of dailyQuests; track q.id) {
+          <div class="quest-card" [class.done]="q.claimed">
+
+            <div class="quest-left">
+              <div class="quest-icon">{{ q.icon }}</div>
+              <div class="quest-info">
+                <div class="quest-title">{{ q.title }}</div>
+                <div class="quest-desc">{{ q.desc }}</div>
+                <div class="quest-bar-wrap">
+                  <div class="quest-bar">
+                    <div class="quest-fill" [style.width.%]="(q.progress / q.goal) * 100"></div>
+                  </div>
+                  <span class="quest-count">{{ q.progress }}/{{ q.goal }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="quest-right">
+              <div class="xp-badge">+{{ q.xp }} XP</div>
+              @if (status(q) === 'claim') {
+                <button class="btn-claim" (click)="claim(q)">CLAIM</button>
+              } @else if (status(q) === 'done') {
+                <div class="btn-done">✓ DONE</div>
+              } @else {
+                <div class="btn-locked">IN PROGRESS</div>
+              }
+            </div>
+
+          </div>
+        }
+      </div>
+
+      <!-- ── RIGHT: Summary panel ── -->
+      <div class="quests-side">
+
+        <!-- XP earned today -->
+        <div class="side-card earned-card">
+          <div class="earned-icon">⚡</div>
+          <div class="earned-val">{{ totalEarned }}</div>
+          <div class="earned-lbl">XP earned today</div>
+        </div>
+
+        <!-- Weekly challenge -->
+        @if (weeklyQuest) {
+        <div class="side-card weekly-card">
+          <div class="weekly-top">
+            <span class="weekly-icon">{{ weeklyQuest.icon }}</span>
+            <span class="weekly-badge">WEEKLY</span>
+          </div>
+          <div class="weekly-title">{{ weeklyQuest.title }}</div>
+          <div class="weekly-desc">{{ weeklyQuest.desc }}</div>
+          <div class="weekly-bar-wrap">
+            <div class="weekly-bar">
+              <div class="weekly-fill" [style.width.%]="weeklyPct"></div>
+            </div>
+            <span class="weekly-count">{{ weeklyQuest.progress }}/{{ weeklyQuest.goal }} days</span>
+          </div>
+          <div class="weekly-reward">🎁 Reward: +{{ weeklyQuest.xp }} XP</div>
+        </div>
+        }
+
+        <!-- Streak reminder -->
+        <div class="side-card streak-card">
+          <div class="streak-row">
+            <span class="streak-fire">🔥</span>
+            <div>
+              <div class="streak-val">{{ user?.streak || 0 }} day streak</div>
+              <div class="streak-hint">Keep it going — do a lesson today!</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
