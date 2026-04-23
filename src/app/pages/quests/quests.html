@@ -11,7 +11,7 @@
             <h1 class="page-title">Daily Quests</h1>
             <p class="page-sub">Resets at midnight · Earn bonus XP</p>
           </div>
-          <div class="reset-timer">⏰ {{ timerDisplay }}</div>
+          <div class="reset-timer">⏰ Resets in {{ timerDisplay }}</div>
         </div>
 
         @for (q of dailyQuests; track q.id) {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, ActivatedRoute, Router } from '@angular/router';
@@ -63,7 +63,8 @@ export class LessonLearn implements OnInit {
   showGuidebook = false;
 
   constructor(public auth: Auth, private api: Api,
-              private route: ActivatedRoute, private router: Router) {}
+              private route: ActivatedRoute, private router: Router,
+              private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     if (this.auth.getHearts() === 0) { this.noHearts = true; return; }
@@ -217,6 +218,7 @@ export class LessonLearn implements OnInit {
     this.countdown = 3;
     const tick = setInterval(() => {
       this.countdown--;
+      this.cdr.detectChanges();
       if (this.countdown <= 0) {
         clearInterval(tick);
         onDone();

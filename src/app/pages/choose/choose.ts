@@ -1,14 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Navbar } from '../../shared/navbar/navbar';
 import { Api } from '../../services/api';
 import { Auth } from '../../services/auth';
 import { NexaRive } from '../../shared/nexa-rive/nexa-rive';
 
 @Component({
   selector: 'app-choose',
-  imports: [CommonModule, Navbar, NexaRive],
+  imports: [CommonModule, NexaRive],
   templateUrl: './choose.html',
   styleUrl: './choose.css'
 })
@@ -42,9 +41,28 @@ export class Choose implements OnInit {
     { id: '20', time: '20 min / day', label: 'Intense' },
   ];
 
-  constructor(private router: Router, private api: Api, private auth: Auth) {}
+  constructor(private router: Router, private route: ActivatedRoute, private api: Api, private auth: Auth, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
+    const isAdding = this.route.snapshot.queryParamMap.get('add') === 'true';
+    const userId = this.auth.getUser()?.id;
+    if (userId && !isAdding) {
+      this.api.getUserCourses(userId).subscribe({
+        next: (res: any) => {
+          if (res.success && res.courses?.length > 0) {
+            this.router.navigate(['/learn']);
+            return;
+          }
+          this.loadCourses();
+        },
+        error: () => this.loadCourses()
+      });
+    } else {
+      this.loadCourses();
+    }
+  }
+
+  private loadCourses() {
     this.api.getCourses().subscribe({
       next: (res: any) => {
         if (res.success) {
@@ -54,6 +72,7 @@ export class Choose implements OnInit {
             lang:     c.icon,
             fontSize: this.iconFontSize(c.icon),
           }));
+          this.cdr.detectChanges();
         }
       },
       error: () => {}
@@ -62,7 +81,7 @@ export class Choose implements OnInit {
 
   private iconFontSize(icon: string): string {
     if (!icon) return '28px';
-    const len = [...icon].length; // handle emoji (multi-byte)
+    const len = [...icon].length;
     if (len === 1) return '34px';
     if (len === 2) return '28px';
     return '22px';

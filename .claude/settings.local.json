@@ -16,7 +16,9 @@
       "Bash(cp \"D:/Profile photos/girl/ChatGPT Image Apr 15, 2026, 04_06_32 PM.png\" \"C:/xampp/htdocs/codehub-api/avatars/girl/girl2.png\")",
       "Read(//c/xampp/mysql/bin/**)",
       "Bash(./mysql.exe -u root -e \"ALTER TABLE codehub.users ADD COLUMN IF NOT EXISTS avatar VARCHAR\\(60\\) DEFAULT NULL;\")",
-      "Bash(ng serve *)"
+      "Bash(ng serve *)",
+      "Bash(curl -s \"http://localhost/codehub-api/get_profile.php?user_id=1\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); u=d.get\\('user',{}\\); print\\('avatar:', u.get\\('avatar'\\), '| name:', u.get\\('name'\\)\\)\")"
     ]
   }
 }

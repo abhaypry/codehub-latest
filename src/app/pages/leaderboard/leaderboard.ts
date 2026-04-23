@@ -13,7 +13,7 @@ import { Sidebar } from '../../shared/sidebar/sidebar';
 export class Leaderboard implements OnInit {
   userId = 0;
   leaderboard: any[] = [];
-  readonly avatarBase = 'http://localhost/codehub-api/';
+  readonly avatarBase = '/assets/';
 
   constructor(private auth: Auth, private api: Api) {}
 

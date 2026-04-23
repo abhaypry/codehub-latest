@@ -29,8 +29,9 @@
 
     <a routerLink="/profile" routerLinkActive="nav-active" class="nav-link">
       <span class="nav-icon">
-        @if (user?.avatar) {
-          <img [src]="avatarBase + user.avatar" class="sidebar-av-img" alt="avatar" />
+        @if (user?.avatar && !avatarError) {
+          <img [src]="avatarBase + user.avatar" class="sidebar-av-img" alt=""
+               (error)="onAvatarError()" />
         } @else {
           👤
         }

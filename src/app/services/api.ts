@@ -71,11 +71,39 @@ export class Api {
     return this.http.post(`${this.base}/update_banner.php`, { user_id: userId, banner });
   }
 
+  updateProfile(userId: number, name: string, email: string, username: string): Observable<any> {
+    return this.http.post(`${this.base}/update_profile.php`, { user_id: userId, name, email, username });
+  }
+
+  checkUsername(userId: number, username: string): Observable<any> {
+    return this.http.get(`${this.base}/check_username.php?user_id=${userId}&username=${encodeURIComponent(username)}`);
+  }
+
   getQuests(userId: number): Observable<any> {
     return this.http.get(`${this.base}/get_quests.php?user_id=${userId}`);
   }
 
   claimQuest(userId: number, questId: number, xp: number): Observable<any> {
     return this.http.post(`${this.base}/claim_quest.php`, { user_id: userId, quest_id: questId, xp });
+  }
+
+  getFollowing(userId: number): Observable<any> {
+    return this.http.get(`${this.base}/get_following.php?user_id=${userId}`);
+  }
+
+  getFollowers(userId: number): Observable<any> {
+    return this.http.get(`${this.base}/get_followers.php?user_id=${userId}`);
+  }
+
+  searchUsers(userId: number, q: string): Observable<any> {
+    return this.http.get(`${this.base}/search_users.php?user_id=${userId}&q=${encodeURIComponent(q)}`);
+  }
+
+  followUser(followerId: number, followingId: number, action: 'follow' | 'unfollow'): Observable<any> {
+    return this.http.post(`${this.base}/follow_user.php`, { follower_id: followerId, following_id: followingId, action });
+  }
+
+  startTrial(userId: number): Observable<any> {
+    return this.http.post(`${this.base}/start_trial.php`, { user_id: userId });
   }
 }

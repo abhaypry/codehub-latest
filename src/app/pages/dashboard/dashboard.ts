@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, UpperCasePipe } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { Auth } from '../../services/auth';
@@ -16,17 +16,22 @@ export class Dashboard implements OnInit {
   userRank = 0;
 
   noCoursesEnrolled = false;
+  coursesLoading = true;
   lessonsLoading = true;
   private userPickedCourse = false;
   private preferredCourseId: number | null = null;
 
-  constructor(private auth: Auth, private api: Api, private router: Router) {}
+  constructor(private auth: Auth, private api: Api, private router: Router, private cdr: ChangeDetectorRef) {}
 
   courses: any[] = [];
   selectedCourse: any = null;
   pathNodes: any[] = [];
   showCoursePopup = false;
   showGuidebook   = false;
+  showProPopup    = false;
+  trialLoading    = false;
+  trialSuccess    = false;
+  trialEndsAt     = '';
 
   private positions = ['center', 'right', 'center', 'left', 'center', 'right', 'center', 'left'];
 
@@ -56,8 +61,9 @@ export class Dashboard implements OnInit {
     const cached = this.auth.getCache('dashboard_' + this.user?.id);
     if (cached?.courses?.length > 0) {
       this.courses = cached.courses;
+      this.coursesLoading = false;
       if (!this.selectedCourse) {
-        const c = cached.courses[0];
+        const c = this.pickDefaultCourse(cached.courses);
         this.selectedCourse = { ...c, colorDark: c.colorDark || this.getDarkColor(c.color) };
         this.applyThemeColor(this.selectedCourse);
         this.loadCourseLessons(this.selectedCourse.id);
@@ -66,7 +72,7 @@ export class Dashboard implements OnInit {
 
     // Fetch real rank from profile
     this.api.getProfile(this.user?.id || 0).subscribe({
-      next: (res: any) => { if (res.success) this.userRank = res.profile?.rank || 0; },
+      next: (res: any) => { if (res.success) this.userRank = res.user?.rank || 0; },
       error: () => {}
     });
 
@@ -81,6 +87,7 @@ export class Dashboard implements OnInit {
 
           if (freshCourses.length > 0) {
             this.courses = freshCourses;
+            this.coursesLoading = false;
             this.noCoursesEnrolled = false;
             this.auth.setCache('dashboard_' + this.user?.id, { courses: freshCourses });
 
@@ -98,7 +105,7 @@ export class Dashboard implements OnInit {
             });
 
             if (!this.userPickedCourse && !this.selectedCourse) {
-              this.selectedCourse = freshCourses[0];
+              this.selectedCourse = this.pickDefaultCourse(freshCourses);
               this.applyThemeColor(this.selectedCourse);
               this.loadCourseLessons(this.selectedCourse.id);
             } else if (this.selectedCourse) {
@@ -107,13 +114,17 @@ export class Dashboard implements OnInit {
               if (fresh) { this.selectedCourse = fresh; this.applyThemeColor(fresh); }
             }
           } else {
+            this.coursesLoading = false;
+            this.noCoursesEnrolled = true;
             this.auth.setCache('dashboard_' + this.user?.id, null);
-            this.router.navigate(['/choose']);
           }
+          this.cdr.detectChanges();
         }
       },
       error: () => {
-        if (!cached?.courses?.length) this.router.navigate(['/choose']);
+        this.coursesLoading = false;
+        if (!cached?.courses?.length) this.noCoursesEnrolled = true;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -127,6 +138,7 @@ export class Dashboard implements OnInit {
     this.showCoursePopup = false;
     this.userPickedCourse = true;
     this.pathNodes = [];
+    this.auth.setCache('last_course_' + this.user?.id, course.id);
     this.loadCourseLessons(course.id);
   }
 
@@ -152,6 +164,15 @@ export class Dashboard implements OnInit {
       },
       error: () => { this.lessonsLoading = false; }
     });
+  }
+
+  private pickDefaultCourse(courses: any[]): any {
+    const lastId = this.auth.getCache('last_course_' + this.user?.id);
+    if (lastId) {
+      const found = courses.find(c => c.id === lastId);
+      if (found) return found;
+    }
+    return courses[0];
   }
 
   private getDarkColor(lightColor: string): string {
@@ -234,4 +255,20 @@ export class Dashboard implements OnInit {
   get dailyXpProgress() { return (this.dailyXp / this.dailyXpGoal) * 100; }
 
   get heartsArray() { return Array(5).fill(0).map((_, i) => i < (this.user?.hearts || 0)); }
+
+  activateTrial() {
+    if (this.trialLoading || this.trialSuccess) return;
+    this.trialLoading = true;
+    this.api.startTrial(this.user?.id || 0).subscribe({
+      next: (res: any) => {
+        this.trialLoading = false;
+        if (res.success) {
+          this.trialSuccess = true;
+          const d = new Date(res.ends_at);
+          this.trialEndsAt = d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        }
+      },
+      error: () => { this.trialLoading = false; }
+    });
+  }
 }

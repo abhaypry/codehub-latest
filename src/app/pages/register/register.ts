@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -18,7 +18,7 @@ export class Register {
   error = '';
   loading = false;
 
-  constructor(private api: Api, private auth: Auth, private router: Router) {}
+  constructor(private api: Api, private auth: Auth, private router: Router, private cdr: ChangeDetectorRef) {}
 
   submit() {
     this.error = '';
@@ -33,9 +33,14 @@ export class Register {
           this.router.navigate(['/choose']);
         } else {
           this.error = res.message;
+          this.cdr.detectChanges();
         }
       },
-      error: () => { this.loading = false; this.error = 'Cannot connect to server. Is XAMPP running?'; }
+      error: () => {
+        this.loading = false;
+        this.error = 'Something went wrong. Please try again.';
+        this.cdr.detectChanges();
+      }
     });
   }
 }

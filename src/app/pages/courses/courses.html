@@ -20,11 +20,19 @@
             <span>📚 {{ course.lessons }} lessons</span>
             <span>👥 {{ course.students | number }} students</span>
           </div>
-          <button class="btn-duo btn-duo-primary course-btn"
-                  [disabled]="starting === course.id"
-                  (click)="startCourse(course)">
-            {{ starting === course.id ? 'Loading…' : 'Start →' }}
-          </button>
+          @if (!enrolledLoaded) {
+            <button class="btn-duo btn-duo-grey course-btn" disabled>&nbsp;</button>
+          } @else if (isEnrolled(course.id)) {
+            <button class="btn-duo btn-duo-grey course-btn" disabled>
+              Enrolled ✓
+            </button>
+          } @else {
+            <button class="btn-duo btn-duo-primary course-btn"
+                    [disabled]="starting === course.id"
+                    (click)="startCourse(course)">
+              {{ starting === course.id ? 'Loading…' : 'Start →' }}
+            </button>
+          }
         </div>
       </div>
     }

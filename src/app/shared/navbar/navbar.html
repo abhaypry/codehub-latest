@@ -1,12 +1,12 @@
 <nav class="navbar">
   <div class="navbar-inner">
     <a routerLink="/" class="logo">
-      <img src="logo.png" alt="CodeHub" class="logo-img" />
+      <img src="codehub-logo.png" alt="CodeHub" class="logo-img" />
     </a>
 
     @if (auth.isLoggedIn() && !forcePublic) {
       <div class="nav-center">
-        <a routerLink="/learn" routerLinkActive="active">Learn</a>
+        <a routerLink="/dashboard" routerLinkActive="active">Learn</a>
         <a routerLink="/courses" routerLinkActive="active">Courses</a>
         <a routerLink="/leaderboard" routerLinkActive="active">Leaderboard</a>
       </div>
@@ -25,10 +25,10 @@
           }
         </div>
         <a routerLink="/profile" class="avatar">
-          @if (user?.avatar) {
-            <img [src]="'http://localhost/codehub-api/' + user.avatar" class="avatar-img" alt="avatar" />
+          @if (user?.avatar && !avatarError) {
+            <img [src]="'/assets/' + user.avatar" class="avatar-img" alt="" (error)="onAvatarError()" />
           } @else {
-            {{ user?.name?.[0]?.toUpperCase() }}
+            {{ user?.name?.[0]?.toUpperCase() || '?' }}
           }
         </a>
         <button class="btn-logout" (click)="logout()">Logout</button>

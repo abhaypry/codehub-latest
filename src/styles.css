@@ -41,6 +41,7 @@ input, textarea { font-family: inherit; }
   min-width: 0;
   padding: 32px 40px 60px;
   overflow-y: auto;
+  background: var(--bg);
 }
 
 /* ── Duolingo-style 3D button ── */

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -17,7 +17,7 @@ export class Login {
   error = '';
   loading = false;
 
-  constructor(private api: Api, private auth: Auth, private router: Router) {}
+  constructor(private api: Api, private auth: Auth, private router: Router, private cdr: ChangeDetectorRef) {}
 
   submit() {
     this.error = '';
@@ -31,14 +31,16 @@ export class Login {
         this.loading = false;
         if (res.success) {
           this.auth.setUser(res.user);
-          this.router.navigate(['/learn']);
+          this.router.navigate(['/dashboard']);
         } else {
           this.error = res.message || 'Invalid email or password.';
+          this.cdr.detectChanges();
         }
       },
       error: () => {
         this.loading = false;
         this.error = 'Cannot connect to server. Is XAMPP running?';
+        this.cdr.detectChanges();
       }
     });
   }

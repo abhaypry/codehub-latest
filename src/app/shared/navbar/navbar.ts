@@ -12,17 +12,20 @@ import { Router } from '@angular/router';
 })
 export class Navbar implements OnInit {
   @Input() forcePublic = false;
-  user: any = null;
+  avatarError = false;
 
   constructor(public auth: Auth, private router: Router) {}
 
   ngOnInit() {
-    this.user = this.auth.getUser();
+    this.avatarError = false;
   }
+
+  get user() { return this.auth.getUser(); }
+
+  onAvatarError() { this.avatarError = true; }
 
   logout() {
     this.auth.logout();
-    this.user = null;
   }
 
   get hearts() { return this.auth.getHearts(); }

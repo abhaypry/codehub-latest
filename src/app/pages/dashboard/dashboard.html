@@ -4,7 +4,12 @@
 
   <!-- ══ MAIN PATH AREA ══ -->
   <main class="path-area">
-    @if (noCoursesEnrolled) {
+    @if (coursesLoading) {
+      <div class="courses-loading">
+        <div class="courses-loading-spinner"></div>
+        <p class="courses-loading-text">Loading your courses...</p>
+      </div>
+    } @else if (noCoursesEnrolled) {
       <div class="no-courses-state">
         <div class="no-courses-icon">📚</div>
         <h2 class="no-courses-title">No courses enrolled yet!</h2>
@@ -35,7 +40,7 @@
                 </button>
               }
               <div class="cpi-divider"></div>
-              <a routerLink="/choose" class="course-popup-add-btn" (click)="showCoursePopup = false">
+              <a routerLink="/choose" [queryParams]="{add: 'true'}" class="course-popup-add-btn" (click)="showCoursePopup = false">
                 <span class="cpi-plus">+</span>
                 Add new course
               </a>
@@ -107,6 +112,13 @@
 
       <!-- Winding lesson path -->
       <div class="path" [style.--nc]="selectedCourse?.color" [style.--nc-dark]="selectedCourse?.colorDark">
+        @if (lessonsLoading && pathNodes.length === 0) {
+          <div class="path-skeleton">
+            <div class="skel-node"></div>
+            <div class="skel-node"></div>
+            <div class="skel-node"></div>
+          </div>
+        }
         @for (node of pathNodes; track node.id; let i = $index) {
 
           @if (i > 0) {
@@ -157,6 +169,37 @@
         @if (!lessonsLoading && pathNodes.length === 0) {
           <div class="path-empty">No lessons available.</div>
         }
+
+        <!-- Teaser: blurry locked nodes hinting at future content -->
+        @if (!lessonsLoading && pathNodes.length > 0) {
+          <div class="path-tease">
+            <div class="path-tease-fade"></div>
+            <div class="path-tease-nodes">
+              <div class="path-row" data-pos="right">
+                <div class="node-wrapper tease-node">
+                  <div class="node node-locked tease-ghost"></div>
+                  <div class="node-label locked-label tease-label">???</div>
+                </div>
+              </div>
+              <div class="path-row" data-pos="center">
+                <div class="node-wrapper tease-node">
+                  <div class="node node-locked tease-ghost"></div>
+                  <div class="node-label locked-label tease-label">???</div>
+                </div>
+              </div>
+              <div class="path-row" data-pos="left">
+                <div class="node-wrapper tease-node">
+                  <div class="node node-locked tease-ghost"></div>
+                  <div class="node-label locked-label tease-label">???</div>
+                </div>
+              </div>
+            </div>
+            <div class="path-tease-cta">
+              <span class="tease-lock-icon">🔒</span>
+              <p class="tease-msg">Complete above lessons to unlock more!</p>
+            </div>
+          </div>
+        }
       </div>
 
     }
@@ -195,8 +238,42 @@
         </div>
         <div class="pro-mascot">🤖</div>
       </div>
-      <a routerLink="/courses" class="pro-btn">TRY 1 WEEK FREE</a>
+      <button class="pro-btn" (click)="showProPopup = true">TRY 1 WEEK FREE</button>
     </div>
+
+    <!-- PRO trial popup -->
+    @if (showProPopup) {
+      <div class="pro-overlay" (click)="showProPopup = false">
+        <div class="pro-modal" (click)="$event.stopPropagation()">
+          <button class="pro-modal-close" (click)="showProPopup = false">✕</button>
+
+          <div class="pro-modal-mascot">🤖</div>
+          <div class="pro-modal-badge">PRO</div>
+          <h2 class="pro-modal-title">Try Pro for free</h2>
+          <p class="pro-modal-sub">No payment needed. Cancel anytime.</p>
+
+          <ul class="pro-modal-perks">
+            <li><span class="perk-check">✓</span> Unlimited hearts — never get blocked</li>
+            <li><span class="perk-check">✓</span> No ads, ever</li>
+            <li><span class="perk-check">✓</span> Special practice sessions</li>
+            <li><span class="perk-check">✓</span> Access to all advanced levels</li>
+            <li><span class="perk-check">✓</span> Priority leaderboard badge</li>
+          </ul>
+
+          @if (trialSuccess) {
+            <div class="pro-success-box">
+              🎉 Pro trial activated! Enjoy until <strong>{{ trialEndsAt }}</strong>.
+            </div>
+            <button class="pro-modal-btn" (click)="showProPopup = false">Awesome, let's go!</button>
+          } @else {
+            <button class="pro-modal-btn" (click)="activateTrial()" [disabled]="trialLoading">
+              @if (trialLoading) { Activating... } @else { TRY 1 WEEK FREE }
+            </button>
+            <button class="pro-modal-later" (click)="showProPopup = false">Maybe later</button>
+          }
+        </div>
+      </div>
+    }
 
     <!-- Leaderboard -->
     <div class="rp-card">

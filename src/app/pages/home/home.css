@@ -930,3 +930,60 @@
   .fbadge-streak { display: none; }
   .bot-cap { display: none; }
 }
+
+/* ══════════════════════════════════════
+   FOOTER POPUP
+══════════════════════════════════════ */
+.fp-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 24px;
+  animation: fp-fade-in 0.15s ease;
+}
+@keyframes fp-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.fp-card {
+  background: var(--bg2);
+  border: 2px solid var(--border);
+  border-bottom: 4px solid var(--primary-dark);
+  border-radius: 20px;
+  padding: 36px 32px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  animation: fp-slide-up 0.2s ease;
+}
+@keyframes fp-slide-up {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.fp-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+  line-height: 1;
+}
+.fp-title {
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+.fp-body {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+.fp-btn {
+  min-width: 120px;
+}
+

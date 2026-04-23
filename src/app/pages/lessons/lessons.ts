@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, ActivatedRoute } from '@angular/router';
 import { Api } from '../../services/api';
+import { Auth } from '../../services/auth';
 import { Sidebar } from '../../shared/sidebar/sidebar';
 
 @Component({
@@ -15,7 +16,7 @@ export class Lessons implements OnInit {
   courseId = 1;
   lessons: any[] = [];
 
-  constructor(private route: ActivatedRoute, private api: Api) {}
+  constructor(private route: ActivatedRoute, private api: Api, private auth: Auth) {}
 
   ngOnInit() {
     this.courseId = +this.route.snapshot.paramMap.get('id')! || 1;
@@ -24,7 +25,8 @@ export class Lessons implements OnInit {
 
   private loadLessons() {
     this.loading = true;
-    this.api.getLessons(this.courseId).subscribe({
+    const userId = this.auth.getUser()?.id;
+    this.api.getLessons(this.courseId, userId).subscribe({
       next: (res: any) => {
         this.loading = false;
         if (res.success) {

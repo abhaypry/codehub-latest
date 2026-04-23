@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeHub - Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', Arial, sans-serif;
+            background: #1e1e1e;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .slide {
+            width: 95vw;
+            height: 95vh;
+            background: #1e1e1e;
+            padding: 60px;
+            border-radius: 8px;
+            display: none;
+            flex-direction: column;
+            justify-content: flex-start;
+            position: relative;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        .slide-title {
+            font-size: 3.5em;
+            font-weight: 900;
+            color: #04e88d;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .slide-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200px;
+            height: 4px;
+            background: #04e88d;
+        }
+
+        .slide-content {
+            font-size: 1.6em;
+            line-height: 1.8;
+            margin-top: 40px;
+            flex-grow: 1;
+        }
+
+        .slide-content li {
+            margin-bottom: 20px;
+            margin-left: 40px;
+        }
+
+        .slide-subtitle {
+            font-size: 2.2em;
+            color: #ffffff;
+            margin-top: 40px;
+            font-weight: 700;
+        }
+
+        .slide-author {
+            font-size: 1.4em;
+            color: #9eb3be;
+            margin-top: 60px;
+        }
+
+        /* Title Slide */
+        .title-slide {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .title-slide .slide-title {
+            font-size: 5em;
+            padding-bottom: 40px;
+            border: none;
+        }
+
+        .title-slide .slide-subtitle {
+            margin-top: 0;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .column h3 {
+            color: #04e88d;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        .column ul {
+            list-style: none;
+        }
+
+        .column li {
+            margin-bottom: 12px;
+            margin-left: 0;
+            font-size: 1.4em;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        button {
+            background: #04e88d;
+            color: #1e1e1e;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1em;
+            font-weight: 800;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 0 #02c077;
+        }
+
+        button:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #02c077;
+        }
+
+        button:hover {
+            background: #02c077;
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            font-size: 1.2em;
+            color: #9eb3be;
+            font-weight: 700;
+        }
+
+        .highlight {
+            color: #04e88d;
+            font-weight: 800;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Slide 1: Title -->
+        <div class="slide title-slide active">
+            <h1 class="slide-title">CodeHub</h1>
+            <p class="slide-subtitle">Duolingo-Style Coding Learning Platform</p>
+            <p class="slide-author">B.Tech Final Semester Project</p>
+            <p class="slide-author">by Abhay Prajapati</p>
+        </div>
+
+        <!-- Slide 2: Project Overview -->
+        <div class="slide">
+            <h1 class="slide-title">Project Overview</h1>
+            <ul class="slide-content">
+                <li>🎯 Interactive platform for learning programming languages</li>
+                <li>📚 Bite-sized lessons with multiple-choice quizzes</li>
+                <li>⭐ Gamification: XP rewards, streaks, hearts (lives)</li>
+                <li>🏆 Leaderboard to track top learners</li>
+                <li>💚 Neon green Duolingo-inspired UI/UX</li>
+                <li>🔐 User authentication & progress tracking</li>
+            </ul>
+        </div>
+
+        <!-- Slide 3: Tech Stack -->
+        <div class="slide">
+            <h1 class="slide-title">Tech Stack</h1>
+            <div class="two-column">
+                <div class="column">
+                    <h3>🎨 Frontend</h3>
+                    <ul>
+                        <li>Angular 17+</li>
+                        <li>TypeScript</li>
+                        <li>Standalone Components</li>
+                        <li>Modern CSS (Dark Theme)</li>
+                    </ul>
+                    <h3 style="margin-top: 30px;">🔗 HTTP</h3>
+                    <ul>
+                        <li>REST API</li>
+                        <li>HttpClient</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>🗄️ Backend</h3>
+                    <ul>
+                        <li>PHP 7.4+</li>
+                        <li>REST API Endpoints</li>
+                        <li>CORS Enabled</li>
+                    </ul>
+                    <h3 style="margin-top: 30px;">💾 Database</h3>
+                    <ul>
+                        <li>MySQL (XAMPP)</li>
+                        <li>phpMyAdmin</li>
+                        <li>5 Core Tables</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Key Features -->
+        <div class="slide">
+            <h1 class="slide-title">Key Features</h1>
+            <ul class="slide-content">
+                <li>✅ User Registration & Authentication (localStorage session)</li>
+                <li>✅ Course & Lesson Management with XP Rewards</li>
+                <li>✅ Interactive Quiz System with Hearts (5 max, lose 1 per wrong)</li>
+                <li>✅ Real-time Leaderboard (top 10 by XP)</li>
+                <li>✅ User Profiles with Stats, Level, Badges</li>
+                <li>✅ Streak Tracking (consecutive day logins)</li>
+                <li>✅ Responsive Design (Dark Theme, Neon Accent)</li>
+            </ul>
+        </div>
+
+        <!-- Slide 5: Database Schema -->
+        <div class="slide">
+            <h1 class="slide-title">Database Schema</h1>
+            <ul class="slide-content">
+                <li>📋 <span class="highlight">users</span>: id, name, email, password, xp, streak, hearts, last_active</li>
+                <li>📚 <span class="highlight">courses</span>: id, title, description, icon, color</li>
+                <li>📖 <span class="highlight">lessons</span>: id, course_id, title, content, xp_reward, order_num</li>
+                <li>❓ <span class="highlight">quiz_questions</span>: id, lesson_id, question, options (a-d), correct_option</li>
+                <li>📊 <span class="highlight">user_progress</span>: id, user_id, lesson_id, completed, score, completed_at</li>
+            </ul>
+        </div>
+
+        <!-- Slide 6: Page Structure -->
+        <div class="slide">
+            <h1 class="slide-title">Page Structure (8 Pages)</h1>
+            <ul class="slide-content">
+                <li>🏠 <span class="highlight">Home</span>: Public landing page (no auth)</li>
+                <li>🔑 <span class="highlight">Login / Register</span>: Authentication forms</li>
+                <li>📊 <span class="highlight">Dashboard</span>: Winding lesson path with progress nodes</li>
+                <li>📚 <span class="highlight">Courses</span>: Grid view of all courses</li>
+                <li>📝 <span class="highlight">Lessons</span>: List per course with content</li>
+                <li>❓ <span class="highlight">Quiz</span>: Interactive quiz with hearts system</li>
+                <li>🏆 <span class="highlight">Leaderboard</span>: Top 10 users by XP</li>
+                <li>👤 <span class="highlight">Profile</span>: User stats, level, badges</li>
+            </ul>
+        </div>
+
+        <!-- Slide 7: Design System -->
+        <div class="slide">
+            <h1 class="slide-title">Design System</h1>
+            <ul class="slide-content">
+                <li>🎨 <span class="highlight">Primary Color</span>: Neon Green #04E88D (brand color)</li>
+                <li>🎨 <span class="highlight">Background</span>: VS Code Dark #1E1E1E</li>
+                <li>🎨 <span class="highlight">Cards</span>: #252526 with border depth effect</li>
+                <li>🎨 <span class="highlight">Danger</span>: #FF4B4B (hearts, errors)</li>
+                <li>🎨 <span class="highlight">Warning</span>: #FFC800 (streak fire emoji)</li>
+                <li>🔤 <span class="highlight">Typography</span>: Nunito font (700/800/900 weights - bold & chunky)</li>
+                <li>🎯 <span class="highlight">3D Buttons</span>: Shadow effect on hover/click</li>
+            </ul>
+        </div>
+
+        <!-- Slide 8: Hearts System -->
+        <div class="slide">
+            <h1 class="slide-title">Hearts System (Gamification)</h1>
+            <ul class="slide-content">
+                <li>❤️ <span class="highlight">5 Hearts Maximum</span> per user</li>
+                <li>📉 <span class="highlight">Lose 1 heart</span> per incorrect quiz answer</li>
+                <li>🚫 <span class="highlight">Quiz blocked</span> when hearts = 0</li>
+                <li>🔄 <span class="highlight">Daily refill</span> at reset time (auto-reset after 24h)</li>
+                <li>💾 <span class="highlight">Backend synced</span> via update_hearts.php</li>
+                <li>🎮 <span class="highlight">Encourages daily engagement</span> without frustration</li>
+            </ul>
+        </div>
+
+        <!-- Slide 9: API Endpoints -->
+        <div class="slide">
+            <h1 class="slide-title">Backend API Endpoints</h1>
+            <div class="two-column">
+                <div class="column">
+                    <h3>🔐 Authentication</h3>
+                    <ul>
+                        <li>POST /register.php</li>
+                        <li>POST /login.php</li>
+                    </ul>
+                    <h3 style="margin-top: 20px;">📚 Content</h3>
+                    <ul>
+                        <li>GET /get_courses.php</li>
+                        <li>GET /get_lessons.php</li>
+                        <li>GET /get_quiz.php</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>📊 Progress</h3>
+                    <ul>
+                        <li>POST /save_progress.php</li>
+                        <li>GET /get_profile.php</li>
+                        <li>POST /update_hearts.php</li>
+                    </ul>
+                    <h3 style="margin-top: 20px;">🏆 Social</h3>
+                    <ul>
+                        <li>GET /get_leaderboard.php</li>
+                        <li><strong>Base:</strong> http://localhost/codehub-api/</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: User Journey -->
+        <div class="slide">
+            <h1 class="slide-title">User Journey</h1>
+            <ul class="slide-content">
+                <li>1️⃣ <span class="highlight">Register / Login</span> → Stored in localStorage</li>
+                <li>2️⃣ <span class="highlight">View Dashboard</span> → Winding path shows progress</li>
+                <li>3️⃣ <span class="highlight">Select Course</span> → Browse courses in grid</li>
+                <li>4️⃣ <span class="highlight">Choose Lesson</span> → View content + XP reward</li>
+                <li>5️⃣ <span class="highlight">Take Quiz</span> → Answer questions (1 heart per wrong)</li>
+                <li>6️⃣ <span class="highlight">Earn XP & Streak</span> → Profile updates in real-time</li>
+                <li>7️⃣ <span class="highlight">Climb Leaderboard</span> → Compete with others</li>
+            </ul>
+        </div>
+
+        <!-- Slide 11: Implementation Status -->
+        <div class="slide">
+            <h1 class="slide-title">Implementation Status</h1>
+            <ul class="slide-content">
+                <li>✅ Frontend: All 8 pages built (Angular 17+ with control flow)</li>
+                <li>✅ Backend: All PHP endpoints functional</li>
+                <li>✅ Database: MySQL schema with sample data</li>
+                <li>✅ UI/UX: Duolingo-inspired dark theme + neon green</li>
+                <li>✅ Auth: Login/Register with session storage</li>
+                <li>⏳ API Integration: Ready for real backend calls</li>
+                <li>⏳ Hearts Sync: Backend persistence ready</li>
+            </ul>
+        </div>
+
+        <!-- Slide 12: How to Run -->
+        <div class="slide">
+            <h1 class="slide-title">How to Run</h1>
+            <ul class="slide-content">
+                <li>🖥️ <span class="highlight">Prerequisites</span>: Node.js 18+, XAMPP, VS Code</li>
+                <li style="margin-top: 30px;">🚀 <span class="highlight">Start Backend</span>:</li>
+                <li style="margin-left: 60px;">1. Open XAMPP Control Panel</li>
+                <li style="margin-left: 60px;">2. Start Apache + MySQL</li>
+                <li style="margin-left: 60px;">3. Check http://localhost/phpmyadmin</li>
+                <li style="margin-top: 30px;">🚀 <span class="highlight">Start Frontend</span>:</li>
+                <li style="margin-left: 60px;">ng serve (port 4200)</li>
+                <li style="margin-left: 60px;">Open http://localhost:4200</li>
+            </ul>
+        </div>
+
+        <!-- Slide 13: Challenges & Solutions -->
+        <div class="slide">
+            <h1 class="slide-title">Challenges & Solutions</h1>
+            <ul class="slide-content">
+                <li>🔧 <span class="highlight">Real-time Progress</span> → POST to save_progress.php after quiz</li>
+                <li>🔧 <span class="highlight">Hearts Sync</span> → Store in localStorage + backend DB</li>
+                <li>🔧 <span class="highlight">Responsive Dark UI</span> → CSS custom properties + media queries</li>
+                <li>🔧 <span class="highlight">CORS with PHP</span> → Proper headers in config.php</li>
+                <li>🔧 <span class="highlight">User Session</span> → localStorage key: codehub_user</li>
+            </ul>
+        </div>
+
+        <!-- Slide 14: Future Enhancements -->
+        <div class="slide">
+            <h1 class="slide-title">Future Roadmap</h1>
+            <ul class="slide-content">
+                <li>🎯 Mobile app version (React Native / Flutter)</li>
+                <li>🎯 Real-time hints & explanations in lessons</li>
+                <li>🎯 Social features (follow friends, chat)</li>
+                <li>🎯 Certificate generation on course completion</li>
+                <li>🎯 Admin dashboard (course/lesson management)</li>
+                <li>🎯 Dark/Light theme toggle</li>
+                <li>🎯 Gamified badges & achievement system</li>
+                <li>🎯 Advanced analytics & API rate limiting</li>
+            </ul>
+        </div>
+
+        <!-- Slide 15: Conclusion -->
+        <div class="slide title-slide">
+            <h1 class="slide-title">Thank You!</h1>
+            <p class="slide-subtitle">Questions?</p>
+            <p class="slide-author">CodeHub - Learn. Play. Master Code.</p>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current">1</span> / <span id="total">15</span>
+    </div>
+
+    <div class="nav-buttons">
+        <button onclick="prevSlide()">← PREV</button>
+        <button onclick="nextSlide()">NEXT →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        document.getElementById('total').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[n].classList.add('active');
+            document.getElementById('current').textContent = n + 1;
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            showSlide(currentSlide);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+    </script>
+</body>
+</html>
