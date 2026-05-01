@@ -9,7 +9,11 @@
         @for (c of courses; track c.id) {
           <div class="course-card" [class.selected]="isCourseSelected(c.id)" [style.--cc]="c.color" (click)="toggleCourse(c.id)">
             <div class="card-icon-wrap">
-              <span class="card-lang" [style.font-size]="c.fontSize">{{ c.lang }}</span>
+              @if (c.iconUrl) {
+                <img [src]="c.iconUrl" [alt]="c.name" class="card-lang-img">
+              } @else {
+                <span class="card-letter">{{ c.letter }}</span>
+              }
             </div>
             <p class="card-name">{{ c.name }}</p>
             @if (isCourseSelected(c.id)) { <div class="card-check">✓</div> }
@@ -47,7 +51,7 @@
       <div class="survey-options">
         @for (lv of levels; track lv.id) {
           <div class="survey-option" [class.selected]="selectedLevel === lv.id" (click)="selectLevel(lv.id)">
-            <span class="survey-opt-emoji">{{ lv.emoji }}</span>
+            <img [src]="lv.icon" [alt]="lv.label" class="survey-opt-icon">
             <div class="survey-opt-text">
               <p class="survey-opt-label">{{ lv.label }}</p>
               <p class="survey-opt-sub">{{ lv.sub }}</p>
@@ -69,7 +73,7 @@
       <div class="survey-options">
         @for (ed of educations; track ed.id) {
           <div class="survey-option" [class.selected]="selectedEdu === ed.id" (click)="selectEdu(ed.id)">
-            <span class="survey-opt-emoji">{{ ed.emoji }}</span>
+            <img [src]="ed.icon" [alt]="ed.label" class="survey-opt-icon">
             <div class="survey-opt-text">
               <p class="survey-opt-label">{{ ed.label }}</p>
               <p class="survey-opt-sub">{{ ed.sub }}</p>

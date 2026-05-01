@@ -33,7 +33,22 @@ export interface Chapter {
 }
 
 
-// ── Component ──────────────────────────────────────────────────────────────
+/**
+ * Lesson Learn / Interactive Lesson Component
+ * Protected page (login required)
+ * Shows lesson content with interactive steps:
+ * - Learn: show code/theory
+ * - Understand: read explanation
+ * - Tap: click correct answer
+ * - MCQ: multiple choice question
+ * - Fill: fill-in-the-blank code
+ * - Rule: learn coding rule
+ * - Error Fix: fix broken code
+ * - Final: challenge question
+ *
+ * Hearts deducted for wrong answers
+ * XP awarded on completion
+ */
 @Component({
   selector: 'app-lesson-learn',
   imports: [CommonModule, FormsModule, RouterLink],
@@ -41,26 +56,31 @@ export interface Chapter {
   styleUrl:    './lesson-learn.css'
 })
 export class LessonLearn implements OnInit {
-  lessonId = 0;
-  courseId = 0;
-  chapter: Chapter | null = null;
+  // Lesson data
+  lessonId = 0; // Which lesson user is in
+  courseId = 0; // Which course this lesson belongs to
+  chapter: Chapter | null = null; // Current chapter/lesson content
 
-  stepIndex = 0;
-  answered  = false;
-  selectedIdx: number | null = null;
-  isCorrect = false;
+  // Step navigation
+  stepIndex = 0; // Currently displayed step in chapter
+  answered = false; // User answered current step (can't change)
+  selectedIdx: number | null = null; // Which option user selected
+  isCorrect = false; // Is selected answer correct?
 
-  fillInput   = '';
-  fillChecked = false;
-  fillCorrect = false;
+  // Fill-in-blank answer
+  fillInput = ''; // User's text input
+  fillChecked = false; // User clicked "Check"
+  fillCorrect = false; // Is user's answer correct?
 
-  noHearts  = false;
-  finished  = false;
-  xpEarned  = 20;
-  countdown = 3;
+  // Quiz completion
+  noHearts = false; // User has 0 hearts → lesson blocked
+  finished = false; // Lesson completed → show results
+  xpEarned = 20; // XP awarded for completing lesson
+  countdown = 3; // Countdown before returning to dashboard
 
-  shakingIdx: number | null = null;
-  showGuidebook = false;
+  // UI effects
+  shakingIdx: number | null = null; // Shake animation for wrong answer
+  showGuidebook = false; // Show lesson guide/hints
 
   constructor(public auth: Auth, private api: Api,
               private route: ActivatedRoute, private router: Router,

@@ -18,7 +18,7 @@
           <div class="quest-card" [class.done]="q.claimed">
 
             <div class="quest-left">
-              <div class="quest-icon">{{ q.icon }}</div>
+              <div class="quest-icon"><img [src]="q.icon" class="quest-icon-img" alt=""></div>
               <div class="quest-info">
                 <div class="quest-title">{{ q.title }}</div>
                 <div class="quest-desc">{{ q.desc }}</div>
@@ -51,7 +51,7 @@
 
         <!-- XP earned today -->
         <div class="side-card earned-card">
-          <div class="earned-icon">⚡</div>
+          <div class="earned-icon"><img src="assets/icons/energy icon.svg" alt="xp" style="width:48px;height:48px;object-fit:contain;"></div>
           <div class="earned-val">{{ totalEarned }}</div>
           <div class="earned-lbl">XP earned today</div>
         </div>
@@ -60,7 +60,7 @@
         @if (weeklyQuest) {
         <div class="side-card weekly-card">
           <div class="weekly-top">
-            <span class="weekly-icon">{{ weeklyQuest.icon }}</span>
+            <span class="weekly-icon"><img [src]="weeklyQuest.icon" class="quest-icon-img" alt=""></span>
             <span class="weekly-badge">WEEKLY</span>
           </div>
           <div class="weekly-title">{{ weeklyQuest.title }}</div>
@@ -78,7 +78,7 @@
         <!-- Streak reminder -->
         <div class="side-card streak-card">
           <div class="streak-row">
-            <span class="streak-fire">🔥</span>
+            <span class="streak-fire"><img src="assets/icons/steak icon.svg" style="width:32px;height:32px;object-fit:contain;" alt="streak"></span>
             <div>
               <div class="streak-val">{{ user?.streak || 0 }} day streak</div>
               <div class="streak-hint">Keep it going — do a lesson today!</div>

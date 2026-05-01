@@ -64,12 +64,14 @@
   padding: 6px 12px;
 }
 .stat-val { font-size: 14px; font-weight: 800; }
-.fire { font-size: 16px; }
-.bolt { font-size: 14px; }
+.fire { font-size: 16px; display: flex; align-items: center; }
+.bolt { font-size: 14px; display: flex; align-items: center; }
+.nav-stat-icon { width: 20px; height: 20px; object-fit: contain; display: block; }
 
 .hearts-row { display: flex; gap: 1px; align-items: center; }
-.heart { font-size: 14px; transition: opacity 0.2s; }
+.heart { font-size: 14px; transition: opacity 0.2s; display: flex; align-items: center; }
 .heart.empty { filter: grayscale(1); opacity: 0.3; }
+.nav-heart-icon { width: 18px; height: 18px; object-fit: contain; display: block; }
 
 .avatar {
   width: 36px;

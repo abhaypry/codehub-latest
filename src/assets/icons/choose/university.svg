@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Cap board -->
+  <ellipse cx="32" cy="22" rx="26" ry="7" fill="#1A237E"/>
+  <rect x="6" y="18" width="52" height="8" rx="4" fill="#283593"/>
+  <!-- Cap body -->
+  <path d="M14 22 Q14 34 32 38 Q50 34 50 22 Z" fill="#3949AB"/>
+  <!-- Top flat part (mortarboard) -->
+  <rect x="6" y="16" width="52" height="7" rx="4" fill="#1A237E"/>
+  <!-- Tassel string -->
+  <line x1="54" y1="20" x2="54" y2="36" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Tassel end -->
+  <circle cx="54" cy="37" r="3" fill="#FFD700"/>
+  <line x1="52" y1="37" x2="50" y2="44" stroke="#FFC107" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="54" y1="37" x2="54" y2="45" stroke="#FFC107" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="56" y1="37" x2="58" y2="44" stroke="#FFC107" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Shine -->
+  <path d="M10 20 Q20 16 30 18" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <!-- Diploma scroll beneath -->
+  <rect x="22" y="46" width="20" height="14" rx="4" fill="#FFFDE7"/>
+  <rect x="22" y="46" width="20" height="6" rx="3" fill="#FFF9C4"/>
+  <line x1="26" y1="52" x2="38" y2="52" stroke="#F9A825" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="26" y1="55" x2="36" y2="55" stroke="#F9A825" stroke-width="1" stroke-linecap="round"/>
+  <!-- Ribbon -->
+  <circle cx="32" cy="48" r="2.5" fill="#E53935"/>
+</svg>

@@ -18,7 +18,13 @@
       "Bash(./mysql.exe -u root -e \"ALTER TABLE codehub.users ADD COLUMN IF NOT EXISTS avatar VARCHAR\\(60\\) DEFAULT NULL;\")",
       "Bash(ng serve *)",
       "Bash(curl -s \"http://localhost/codehub-api/get_profile.php?user_id=1\")",
-      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); u=d.get\\('user',{}\\); print\\('avatar:', u.get\\('avatar'\\), '| name:', u.get\\('name'\\)\\)\")"
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); u=d.get\\('user',{}\\); print\\('avatar:', u.get\\('avatar'\\), '| name:', u.get\\('name'\\)\\)\")",
+      "mcp__ide__getDiagnostics",
+      "WebFetch(domain:cdn-icons-svg.flaticon.com)",
+      "WebFetch(domain:www.flaticon.com)",
+      "WebFetch(domain:cdn-icons-png.flaticon.com)",
+      "WebSearch",
+      "Read(//c/xampp/htdocs/codehub-api/**)"
     ]
   }
 }

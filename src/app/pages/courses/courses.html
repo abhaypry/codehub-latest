@@ -11,14 +11,18 @@
     @for (course of courses; track course.id) {
       <div class="course-card">
         <div class="course-banner" [style.background]="course.color">
-          <div class="course-letter">{{ course.title[0] }}</div>
+          @if (course.iconUrl) {
+            <img [src]="course.iconUrl" [alt]="course.title" class="course-lang-logo" (error)="course.iconUrl = ''">
+          } @else {
+            <div class="course-letter">{{ course.title[0] }}</div>
+          }
         </div>
         <div class="course-body">
           <h3>{{ course.title }}</h3>
           <p>{{ course.description }}</p>
           <div class="course-meta">
-            <span>📚 {{ course.lessons }} lessons</span>
-            <span>👥 {{ course.students | number }} students</span>
+            <span><img src="assets/icons/learn icon.svg" class="inline-icon" alt=""> {{ course.lessons }} lessons</span>
+            <span><img src="https://cdn-icons-png.flaticon.com/512/5189/5189306.png" class="inline-icon" alt=""> {{ course.students | number }} students</span>
           </div>
           @if (!enrolledLoaded) {
             <button class="btn-duo btn-duo-grey course-btn" disabled>&nbsp;</button>

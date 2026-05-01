@@ -17,7 +17,8 @@
 }
 .ach-modal-item.locked { opacity: .45; }
 
-.ach-modal-icon { font-size: 28px; flex-shrink: 0; }
+.ach-modal-icon { font-size: 28px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.ach-modal-icon-img { width: 32px; height: 32px; object-fit: contain; }
 
 .ach-modal-info { flex: 1; min-width: 0; }
 .ach-modal-label { font-size: 14px; font-weight: 800; color: var(--text); }
@@ -179,7 +180,7 @@
 .p-social-link { cursor: pointer; transition: color 0.15s; }
 .p-social-link:hover { color: var(--primary); }
 .p-social-link:hover strong { color: var(--primary); }
-.flag-row { display: flex; gap: 6px; }
+.flag-row { display: flex; gap: 8px; align-items: center; }
 .flag-badge {
   font-size: 18px;
   background: var(--bg2);
@@ -187,6 +188,16 @@
   border-bottom: 3px solid var(--border);
   border-radius: 8px;
   padding: 3px 8px;
+}
+.flag-badge-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  background: var(--bg2);
+  border: 2px solid var(--border);
+  border-bottom: 3px solid var(--border);
+  border-radius: 8px;
+  padding: 4px;
 }
 
 /* ── Section blocks ── */
@@ -211,7 +222,8 @@
   border-radius: 16px;
   padding: 16px 18px;
 }
-.sc-icon { font-size: 28px; flex-shrink: 0; }
+.sc-icon { font-size: 28px; flex-shrink: 0; display: flex; align-items: center; }
+.sc-svg { width: 36px; height: 36px; object-fit: contain; }
 .sc-val {
   font-size: 18px;
   font-weight: 900;
@@ -247,10 +259,16 @@
   justify-content: center;
   font-size: 24px;
 }
+.ach-icon-img { width: 30px; height: 30px; object-fit: contain; }
 .ach-lbl { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
 .ach-item.locked .ach-icon { filter: grayscale(1); opacity: 0.35; }
 
 /* ── Logout ── */
+/* ── Theme selector ── */
+.theme-selector {
+  display: flex;
+}
+
 .logout-btn {
   width: 100%;
   margin-top: 8px;
@@ -302,6 +320,7 @@
   margin-bottom: 20px;
 }
 .social-illustration { font-size: 56px; margin-bottom: 12px; }
+.social-3d-icon { width: 72px; height: 72px; object-fit: contain; }
 .social-msg { font-size: 13px; font-weight: 700; color: var(--text-muted); line-height: 1.55; }
 
 .friends-section { }
@@ -320,7 +339,8 @@
   transition: background 0.15s;
 }
 .friend-row:hover { background: var(--bg3); }
-.friend-icon { font-size: 20px; }
+.friend-icon { font-size: 20px; display: flex; align-items: center; }
+.friend-3d-icon { width: 32px; height: 32px; object-fit: contain; }
 .friend-label { flex: 1; font-size: 14px; font-weight: 700; }
 .friend-arrow { font-size: 22px; color: var(--text-muted); }
 
@@ -722,9 +742,10 @@
 .follow-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
 /* ── Social user meta row (xp + course icons) ── */
-.su-meta { display: flex; align-items: center; gap: 8px; margin-top: 1px; flex-wrap: wrap; }
-.su-courses { display: flex; gap: 2px; }
+.su-meta { display: flex; align-items: center; gap: 6px; margin-top: 2px; flex-wrap: nowrap; }
+.su-courses { display: flex; gap: 3px; align-items: center; border-left: 1px solid var(--border); padding-left: 6px; }
 .su-course-icon { font-size: 13px; line-height: 1; }
+.su-course-icon-img { width: 14px; height: 14px; object-fit: contain; opacity: 0.85; }
 
 /* ── Invite friends modal ── */
 .invite-box { max-width: 500px; }

@@ -4,14 +4,22 @@ import { FormsModule } from '@angular/forms';
 import { Auth } from '../../services/auth';
 import { Api } from '../../services/api';
 import { Sidebar } from '../../shared/sidebar/sidebar';
+import { ThemeService, THEMES } from '../../services/theme';
+import { getCourseIconUrl } from '../../utils/course-icons';
 
+// Image paths for avatar and banner options
 const AVATAR_BASE = '/assets/';
-
 const BOY_AVATARS  = ['avatars/boy/boy1.png',  'avatars/boy/boy2.png',  'avatars/boy/boy3.png'];
 const GIRL_AVATARS = ['avatars/girl/girl1.png', 'avatars/girl/girl2.png',
                       'avatars/girl/girl3.png', 'avatars/girl/girl4.png'];
 const BANNERS      = ['banners/banner1.png', 'banners/banner2.png', 'banners/banner3.png'];
 
+/**
+ * Profile Page Component
+ * Protected page (login required)
+ * Shows user's stats (level, XP, rank, streak), achievements, social tabs
+ * User can edit name/email/username and pick avatar/banner
+ */
 @Component({
   selector: 'app-profile',
   imports: [CommonModule, FormsModule, Sidebar],
@@ -19,34 +27,35 @@ const BANNERS      = ['banners/banner1.png', 'banners/banner2.png', 'banners/ban
   styleUrl: './profile.css'
 })
 export class Profile implements OnInit {
-  profile: any = null;
-  saveError    = '';
+  // User profile data
+  profile: any = null; // Loaded from backend
+  saveError = ''; // Error message if save failed
 
-  // Avatar picker state
-  editOpen       = false;
-  previewOpen    = false;
-  pickerGender: 'boy' | 'girl' = 'boy';
-  selectedAvatar = '';
+  // ====== AVATAR PICKER ======
+  editOpen = false; // Avatar picker modal open
+  previewOpen = false; // Avatar preview popup open
+  pickerGender: 'boy' | 'girl' = 'boy'; // Filter avatars by gender
+  selectedAvatar = ''; // Currently selected avatar in picker
 
-  // Banner picker state
-  bannerEditOpen = false;
-  selectedBanner = '';
+  // ====== BANNER PICKER ======
+  bannerEditOpen = false; // Banner picker modal open
+  selectedBanner = ''; // Currently selected banner in picker
 
   readonly boyAvatars  = BOY_AVATARS;
   readonly girlAvatars = GIRL_AVATARS;
   readonly banners     = BANNERS;
 
-  // Social / follow state
-  activeTab: 'following' | 'followers' = 'following';
-  following: any[] = [];
-  followers: any[] = [];
-  followingLoaded = false;
-  followersLoaded = false;
-  socialLoading = false;
+  // ====== SOCIAL (FOLLOWING/FOLLOWERS) ======
+  activeTab: 'following' | 'followers' = 'following'; // Which social tab is selected
+  following: any[] = []; // Users this person follows
+  followers: any[] = []; // Users following this person
+  followingLoaded = false; // Fetched following list
+  followersLoaded = false; // Fetched followers list
+  socialLoading = false; // Loading social data
 
-  // Social count popup
-  socialListOpen = false;
-  socialListTab: 'following' | 'followers' = 'following';
+  // Social count popup (shows full list)
+  socialListOpen = false; // Popup open
+  socialListTab: 'following' | 'followers' = 'following'; // Which list to show
 
   openSocialList(tab: 'following' | 'followers') {
     this.socialListTab = tab;
@@ -54,34 +63,46 @@ export class Profile implements OnInit {
   }
   closeSocialList() { this.socialListOpen = false; }
 
-  // Find friends modal
-  findFriendOpen  = false;
-  searchQuery     = '';
-  searchResults: any[] = [];
-  searchLoading   = false;
-  followLoading   = new Set<number>();
-  private searchTimer: any = null;
+  // ====== FIND FRIENDS (SEARCH) ======
+  findFriendOpen = false; // Search modal open
+  searchQuery = ''; // User's search input
+  searchResults: any[] = []; // Users matching search
+  searchLoading = false; // Fetching search results
+  followLoading = new Set<number>(); // Which users are being followed/unfollowed (for loading state)
+  private searchTimer: any = null; // Debounce timer for search
 
-  // Achievements modal
-  achievementsOpen = false;
+  // ====== ACHIEVEMENTS ======
+  achievementsOpen = false; // Achievements modal open
 
+  // ====== PROFILE EDIT (NAME/EMAIL/USERNAME) ======
+  profileEditOpen = false; // Profile edit modal open
+  editName = ''; // Name being edited
+  editEmail = ''; // Email being edited
+  editUsername = ''; // Username being edited
+  profileEditError = ''; // Error message
+  profileEditSaving = false; // Saving changes
+  usernameStatus: 'idle' | 'checking' | 'available' | 'taken' | 'invalid' = 'idle'; // Validation status
+  private unameTimer: any = null; // Debounce timer for username check
+
+  // ====== ACHIEVEMENTS ======
+  // List of all possible achievements (unlocked/locked based on user stats)
   get allAchievements() {
     const xp     = this.profile?.xp     || 0;
     const streak = this.profile?.streak || 0;
     const rank   = this.profile?.rank   || 999;
     return [
-      { icon: '🔥', label: 'Streak Starter',  desc: 'Reach a 3-day streak',          unlocked: streak >= 3  },
-      { icon: '🔥', label: 'On Fire',          desc: 'Reach a 7-day streak',          unlocked: streak >= 7  },
-      { icon: '🔥', label: 'Unstoppable',      desc: 'Reach a 30-day streak',         unlocked: streak >= 30 },
-      { icon: '⚡', label: 'First Steps',      desc: 'Earn 100 XP',                   unlocked: xp >= 100   },
-      { icon: '⚡', label: 'XP Hunter',        desc: 'Earn 500 XP',                   unlocked: xp >= 500   },
-      { icon: '⚡', label: 'XP Legend',        desc: 'Earn 1000 XP',                  unlocked: xp >= 1000  },
-      { icon: '🏆', label: 'Top 10',           desc: 'Reach top 10 on leaderboard',   unlocked: rank <= 10  },
-      { icon: '🏆', label: 'Top 3',            desc: 'Reach top 3 on leaderboard',    unlocked: rank <= 3   },
-      { icon: '👑', label: 'Champion',         desc: 'Reach #1 on leaderboard',       unlocked: rank === 1  },
-      { icon: '💎', label: 'Sapphire',         desc: 'Reach Sapphire league',         unlocked: streak >= 7  },
-      { icon: '💎', label: 'Diamond',          desc: 'Earn 1000 XP and 30-day streak',unlocked: xp >= 1000 && streak >= 30 },
-      { icon: '🎯', label: 'Perfect Score',    desc: 'Complete a quiz with 100%',     unlocked: false       },
+      { icon: 'assets/icons/steak icon.svg',       label: 'Streak Starter',  desc: 'Reach a 3-day streak',           unlocked: streak >= 3  },
+      { icon: 'assets/icons/steak icon.svg',       label: 'On Fire',          desc: 'Reach a 7-day streak',           unlocked: streak >= 7  },
+      { icon: 'assets/icons/steak icon.svg',       label: 'Unstoppable',      desc: 'Reach a 30-day streak',          unlocked: streak >= 30 },
+      { icon: 'assets/icons/energy icon.svg',      label: 'First Steps',      desc: 'Earn 100 XP',                    unlocked: xp >= 100   },
+      { icon: 'assets/icons/energy icon.svg',      label: 'XP Hunter',        desc: 'Earn 500 XP',                    unlocked: xp >= 500   },
+      { icon: 'assets/icons/energy icon.svg',      label: 'XP Legend',        desc: 'Earn 1000 XP',                   unlocked: xp >= 1000  },
+      { icon: 'assets/icons/leaderboard icon.svg', label: 'Top 10',           desc: 'Reach top 10 on leaderboard',    unlocked: rank <= 10  },
+      { icon: 'assets/icons/leaderboard icon.svg', label: 'Top 3',            desc: 'Reach top 3 on leaderboard',     unlocked: rank <= 3   },
+      { icon: 'assets/icons/leaderboard icon.svg', label: 'Champion',         desc: 'Reach #1 on leaderboard',        unlocked: rank === 1  },
+      { icon: 'assets/icons/diamond icon.svg',     label: 'Sapphire',         desc: 'Reach Sapphire league',          unlocked: streak >= 7  },
+      { icon: 'assets/icons/diamond icon.svg',     label: 'Diamond',          desc: 'Earn 1000 XP and 30-day streak', unlocked: xp >= 1000 && streak >= 30 },
+      { icon: 'assets/icons/quests icon.svg',      label: 'Perfect Score',    desc: 'Complete a quiz with 100%',      unlocked: false       },
     ];
   }
 
@@ -93,16 +114,6 @@ export class Profile implements OnInit {
 
   openAchievements()  { this.achievementsOpen = true;  }
   closeAchievements() { this.achievementsOpen = false; }
-
-  // Edit profile modal
-  profileEditOpen      = false;
-  editName             = '';
-  editEmail            = '';
-  editUsername         = '';
-  profileEditError     = '';
-  profileEditSaving    = false;
-  usernameStatus: 'idle' | 'checking' | 'available' | 'taken' | 'invalid' = 'idle';
-  private unameTimer: any = null;
 
   openProfileEdit() {
     this.editName         = this.profile?.name     || '';
@@ -224,8 +235,15 @@ export class Profile implements OnInit {
     });
   }
 
-  constructor(private auth: Auth, private api: Api, private cdr: ChangeDetectorRef) {}
+  readonly themes = THEMES;
+  constructor(private auth: Auth, private api: Api, private cdr: ChangeDetectorRef, public theme: ThemeService) {}
 
+  /**
+   * Load profile page
+   * 1. Get user from localStorage
+   * 2. Fetch full profile data from backend (rank, stats, etc.)
+   * 3. Load following + followers lists
+   */
   ngOnInit() {
     const user = this.auth.getUser();
     if (user) {
@@ -236,6 +254,7 @@ export class Profile implements OnInit {
     }
   }
 
+  // Fetch full profile data from backend (includes rank, stats, etc.)
   private loadProfile(userId: number) {
     this.api.getProfile(userId).subscribe({
       next: (res: any) => {
@@ -265,9 +284,12 @@ export class Profile implements OnInit {
     });
   }
 
-  // ── Computed ──────────────────────────────────────────────────
+  // ====== COMPUTED PROPERTIES (Getters) ======
+  // User's current level (100 XP per level, starting at level 1)
   get level()     { return this.profile ? Math.floor((this.profile.xp || 0) / 100) + 1 : 1; }
+  // XP progress within current level (0-99)
   get xpInLevel() { return this.profile ? (this.profile.xp || 0) % 100 : 0; }
+  // Format join date as "Month Year" (e.g., "March 2026")
   get joinDate()  {
     if (!this.profile?.created_at) return 'Recently';
     const iso = String(this.profile.created_at).replace(' ', 'T');
@@ -275,12 +297,14 @@ export class Profile implements OnInit {
     return isNaN(d.getTime()) ? 'Recently' : d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
   }
 
+  // Convert relative image path to full URL
   mediaUrl(path: string | null | undefined): string {
     return path ? AVATAR_BASE + path : '';
   }
 
   get currentAvatarUrl(): string { return this.mediaUrl(this.profile?.avatar); }
   get currentBannerUrl(): string { return this.mediaUrl(this.profile?.banner); }
+  // Show boy or girl avatars based on picker selection
   get pickerList(): string[]     { return this.pickerGender === 'boy' ? this.boyAvatars : this.girlAvatars; }
 
   avatarImgLoaded = false;
@@ -365,17 +389,32 @@ export class Profile implements OnInit {
     });
   }
 
-  // ── Social tabs ───────────────────────────────────────────────
+  // ====== SOCIAL TABS (Following/Followers) ======
+  // Switch between "Following" and "Followers" tabs
   switchTab(tab: 'following' | 'followers') {
     this.activeTab = tab;
   }
 
+  private mapUsers(users: any[]): any[] {
+    return (users || []).map((u: any) => ({
+      ...u,
+      course_icon_urls: (u.course_icons || [])
+        .map((c: any) => {
+          const t = typeof c === 'object' ? c.title : c;
+          const ic = typeof c === 'object' ? c.icon : c;
+          return getCourseIconUrl(t) || getCourseIconUrl(ic) || '';
+        })
+        .filter(Boolean),
+    }));
+  }
+
+  // Fetch list of users current user is following
   loadFollowing() {
     const user = this.auth.getUser();
     if (!user) return;
     this.api.getFollowing(user.id).subscribe({
       next: (res: any) => {
-        this.following = res.success ? res.users : [];
+        this.following = res.success ? this.mapUsers(res.users) : [];
         this.followingLoaded = true;
         this.cdr.detectChanges();
       },
@@ -383,12 +422,13 @@ export class Profile implements OnInit {
     });
   }
 
+  // Fetch list of users following current user
   loadFollowers() {
     const user = this.auth.getUser();
     if (!user) return;
     this.api.getFollowers(user.id).subscribe({
       next: (res: any) => {
-        this.followers = res.success ? res.users : [];
+        this.followers = res.success ? this.mapUsers(res.users) : [];
         this.followersLoaded = true;
         this.cdr.detectChanges();
       },
@@ -396,7 +436,8 @@ export class Profile implements OnInit {
     });
   }
 
-  // ── Find friends modal ────────────────────────────────────────
+  // ====== FIND FRIENDS (SEARCH) ======
+  // Open search modal
   openFindFriend() {
     this.findFriendOpen = true;
     this.searchQuery    = '';

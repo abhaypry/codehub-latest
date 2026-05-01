@@ -78,8 +78,9 @@
 }
 
 .quiz-hearts { display: flex; gap: 2px; }
-.qheart { font-size: 16px; }
+.qheart { font-size: 16px; display: flex; align-items: center; }
 .qheart.empty { filter: grayscale(1); opacity: 0.3; }
+.qheart-icon { width: 20px; height: 20px; object-fit: contain; display: block; }
 
 /* Question */
 .question-area { flex: 1; padding: 32px 0 24px; }

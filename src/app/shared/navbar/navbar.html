@@ -12,16 +12,16 @@
       </div>
       <div class="nav-right">
         <div class="stat-pill">
-          <span class="fire">🔥</span>
+          <span class="fire"><img src="assets/icons/steak icon.svg" alt="" class="nav-stat-icon" /></span>
           <span class="stat-val">{{ user?.streak || 0 }}</span>
         </div>
         <div class="stat-pill">
-          <span class="bolt">⚡</span>
+          <span class="bolt"><img src="assets/icons/energy icon.svg" alt="" class="nav-stat-icon" /></span>
           <span class="stat-val">{{ user?.xp || 0 }}</span>
         </div>
         <div class="hearts-row">
           @for (full of heartsArray; track $index) {
-            <span class="heart" [class.empty]="!full">❤️</span>
+            <span class="heart" [class.empty]="!full"><img src="assets/icons/heart icon.svg" alt="" class="nav-heart-icon" /></span>
           }
         </div>
         <a routerLink="/profile" class="avatar">

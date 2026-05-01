@@ -34,7 +34,7 @@
       </div>
       <div class="learn-hearts">
         @for (full of heartsArr; track $index) {
-          <span class="lheart" [class.empty]="!full">❤️</span>
+          <span class="lheart" [class.empty]="!full"><img src="assets/icons/heart icon.svg" alt="" class="lheart-icon" /></span>
         }
       </div>
       <button class="btn-guidebook" (click)="showGuidebook = true" title="Guidebook">📖</button>

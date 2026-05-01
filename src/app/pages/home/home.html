@@ -5,7 +5,7 @@
   <div class="hero-inner">
 
     <div class="hero-left">
-      <h1>The free, fun, and<br>effective way to<br>learn coding!</h1>
+      <h1>The free, fun, and<br>effective way to<br>learn <span class="tw-word">{{ twDisplay }}</span><span class="tw-cursor">|</span></h1>
       <div class="hero-btns">
         <a routerLink="/register" class="btn-duo btn-duo-primary btn-hero">GET STARTED</a>
         <a routerLink="/login"    class="btn-duo btn-duo-outline btn-hero">I ALREADY HAVE AN ACCOUNT</a>
@@ -16,9 +16,9 @@
       <div class="mascot-wrap">
 
         <!-- floating reward badges -->
-        <div class="fbadge fbadge-xp">⚡ +10 XP</div>
-        <div class="fbadge fbadge-streak">🔥 7-day streak!</div>
-        <div class="fbadge fbadge-heart">❤️ Nice one!</div>
+        <div class="fbadge fbadge-xp"><img src="assets/icons/energy icon.svg" alt="" class="fbadge-icon" /> +10 XP</div>
+        <div class="fbadge fbadge-streak"><img src="assets/icons/steak icon.svg" alt="" class="fbadge-icon" /> 7-day streak!</div>
+        <div class="fbadge fbadge-heart"><img src="assets/icons/heart icon.svg" alt="" class="fbadge-icon" /> Nice one!</div>
 
         <!-- Nexa character -->
         <app-nexa-rive [size]="480"></app-nexa-rive>
@@ -29,33 +29,47 @@
   </div>
 </section>
 
-<!-- ══════════════ SOCIAL PROOF ══════════════ -->
-<section class="social-band">
-  <p class="social-text">Join learners already mastering code with CodeHub</p>
-  <div class="social-pills">
-    <span class="spill">🏆 Top-rated platform</span>
-    <span class="spill">⭐ 4.9 / 5 stars</span>
-    <span class="spill">🌍 100% free forever</span>
-    <span class="spill">🚀 No experience needed</span>
+<!-- ══════════════ STATS BAND ══════════════ -->
+<section class="stats-band">
+  <div class="stats-band-inner">
+    <div class="sbi">
+      <div class="sbi-number"><span class="stat-val" data-count="12847">0</span><span class="sbi-sfx">+</span></div>
+      <div class="sbi-label">Students Enrolled</div>
+    </div>
+    <div class="sbi-divider"></div>
+    <div class="sbi">
+      <div class="sbi-number"><span class="stat-val" data-count="4.9">0.0</span><span class="sbi-sfx"> ★</span></div>
+      <div class="sbi-label">Average Rating</div>
+    </div>
+    <div class="sbi-divider"></div>
+    <div class="sbi">
+      <div class="sbi-number"><span class="stat-val" data-count="100">0</span><span class="sbi-sfx">%</span></div>
+      <div class="sbi-label">Free Forever</div>
+    </div>
+    <div class="sbi-divider"></div>
+    <div class="sbi">
+      <div class="sbi-number"><span class="stat-val" data-count="50">0</span><span class="sbi-sfx">+</span></div>
+      <div class="sbi-label">Lessons Available</div>
+    </div>
   </div>
 </section>
 
 <!-- ══════════════ FEATURE 1 — Fun & Effective ══════════════ -->
 <section class="alt-feat">
   <div class="alt-feat-inner">
-    <div class="alt-feat-text">
-      <h2>Fun and<br>effective</h2>
-      <p>Learning to code doesn't have to be boring. CodeHub makes it feel like a game — bite-sized lessons, instant feedback, and a celebration every time you level up.</p>
+    <div class="alt-feat-text animate-in-left">
+      <h2>Sharp and<br>effective</h2>
+      <p>Progress you can feel after every session. <span class="gw">Bite-sized lessons</span> keep the difficulty curve smooth, <span class="gw">instant feedback</span> on every answer tells you exactly where you stand — and every milestone is earned, not given.</p>
     </div>
     <div class="alt-feat-visual">
-      <div class="phone-mock">
+      <div class="phone-mock animate-in-right">
         <div class="pm-bar">
           <div class="pm-bar-fill"></div>
         </div>
         <div class="pm-header">
-          <span class="pm-streak">🔥 7</span>
+          <span class="pm-streak"><img src="assets/icons/steak icon.svg" alt="" class="mock-icon" /> 7</span>
           <span class="pm-title">C Basics</span>
-          <span class="pm-xp">⚡ 340</span>
+          <span class="pm-xp"><img src="assets/icons/energy icon.svg" alt="" class="mock-icon" /> 340</span>
         </div>
         <div class="pm-lesson-tag">LESSON 4 OF 6</div>
         <div class="pm-question-block">
@@ -68,7 +82,7 @@
           </div>
         </div>
         <div class="pm-result">
-          <span class="pm-result-icon">🎉</span>
+          <span class="pm-result-icon"><i class="fi fi-sr-check-circle"></i></span>
           <span class="pm-result-text">Amazing! +10 XP</span>
         </div>
       </div>
@@ -80,12 +94,12 @@
 <section class="alt-feat alt-feat-flip alt-feat-tint">
   <div class="alt-feat-inner">
     <div class="alt-feat-visual">
-      <div class="stats-mock">
-        <div class="sm-title">📊 Your Progress</div>
+      <div class="stats-mock animate-in-left">
+        <div class="sm-title"><i class="fi fi-sr-bar-chart"></i> Your Progress</div>
         <div class="sm-row"><span>Lessons done</span><span class="sm-val green">12 / 15</span></div>
         <div class="sm-row"><span>Quiz accuracy</span><span class="sm-val green">87%</span></div>
-        <div class="sm-row"><span>XP earned</span><span class="sm-val green">⚡ 340</span></div>
-        <div class="sm-row"><span>Streak</span><span class="sm-val warn">🔥 7 days</span></div>
+        <div class="sm-row"><span>XP earned</span><span class="sm-val green"><img src="assets/icons/energy icon.svg" alt="" class="mock-icon" /> 340</span></div>
+        <div class="sm-row"><span>Streak</span><span class="sm-val warn"><img src="assets/icons/steak icon.svg" alt="" class="mock-icon" /> 7 days</span></div>
         <div class="sm-divider"></div>
         <div class="sm-course-row">
           <span>C Basics</span>
@@ -99,9 +113,9 @@
         </div>
       </div>
     </div>
-    <div class="alt-feat-text">
+    <div class="alt-feat-text animate-in-right">
       <h2>Backed by<br>real results</h2>
-      <p>Our curriculum is built on spaced repetition and active recall — proven techniques that make knowledge stick. Watch your skills grow with detailed progress tracking across every course.</p>
+      <p>Built on <span class="gw">spaced repetition</span> and <span class="gw">active recall</span> — the same science used in medical schools and language mastery programs. Knowledge doesn't just accumulate here. It compounds.</p>
     </div>
   </div>
 </section>
@@ -109,14 +123,14 @@
 <!-- ══════════════ FEATURE 3 — Streaks & Motivation ══════════════ -->
 <section class="alt-feat">
   <div class="alt-feat-inner">
-    <div class="alt-feat-text">
-      <h2>Stay<br>motivated</h2>
-      <p>Build a daily coding habit with streaks that keep you coming back. Lose hearts on wrong answers, fight to keep them. Climb the leaderboard and flex your XP — consistency is mastery.</p>
+    <div class="alt-feat-text animate-in-left">
+      <h2>Built for<br>consistency</h2>
+      <p>Consistency is the only shortcut. <span class="gw">Daily streaks</span> build the habit, hearts raise the stakes, and the <span class="gw">live leaderboard</span> shows exactly where you rank. Show up every day — the code catches up.</p>
     </div>
     <div class="alt-feat-visual">
-      <div class="motivate-mock">
+      <div class="motivate-mock animate-in-right">
         <div class="mm-streak-card">
-          <span class="mm-fire">🔥</span>
+          <span class="mm-fire"><img src="assets/icons/steak icon.svg" alt="" class="mock-icon-lg" /></span>
           <div>
             <p class="mm-streak-num">7-Day Streak!</p>
             <p class="mm-streak-sub">Don't break the chain</p>
@@ -125,14 +139,18 @@
         <div class="mm-hearts-card">
           <p class="mm-hearts-label">Hearts remaining</p>
           <div class="mm-hearts-row">
-            <span>❤️</span><span>❤️</span><span>❤️</span><span>❤️</span><span class="mm-lost">🖤</span>
+            <span><img src="assets/icons/heart icon.svg" alt="" class="mock-icon" /></span>
+            <span><img src="assets/icons/heart icon.svg" alt="" class="mock-icon" /></span>
+            <span><img src="assets/icons/heart icon.svg" alt="" class="mock-icon" /></span>
+            <span><img src="assets/icons/heart icon.svg" alt="" class="mock-icon" /></span>
+            <span class="mm-lost"><img src="assets/icons/heart icon.svg" alt="" class="mock-icon mock-icon-lost" /></span>
           </div>
         </div>
         <div class="mm-board">
-          <div class="mm-rank gold">🥇 <strong>CodeNinja</strong><span>1,200 XP</span></div>
-          <div class="mm-rank silver">🥈 <strong>ByteWizard</strong><span>980 XP</span></div>
-          <div class="mm-rank bronze">🥉 <strong>PixelCoder</strong><span>860 XP</span></div>
-          <div class="mm-rank you">⭐ <strong>You</strong><span>340 XP</span></div>
+          <div class="mm-rank gold"><span class="rank-num">1</span> <strong>CodeNinja</strong><span>1,200 XP</span></div>
+          <div class="mm-rank silver"><span class="rank-num">2</span> <strong>ByteWizard</strong><span>980 XP</span></div>
+          <div class="mm-rank bronze"><span class="rank-num">3</span> <strong>PixelCoder</strong><span>860 XP</span></div>
+          <div class="mm-rank you"><i class="fi fi-sr-star"></i> <strong>You</strong><span>340 XP</span></div>
         </div>
       </div>
     </div>
@@ -143,9 +161,9 @@
 <section class="alt-feat alt-feat-flip alt-feat-tint">
   <div class="alt-feat-inner">
     <div class="alt-feat-visual">
-      <div class="courses-mock">
+      <div class="courses-mock animate-in-left">
         <div class="cmc" style="--cc:#04e88d">
-          <div class="cmc-icon">C</div>
+          <div class="cmc-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/c/c-original.svg" alt="C" class="lang-logo"></div>
           <div class="cmc-info">
             <p class="cmc-title">C Programming</p>
             <p class="cmc-sub">12 lessons · Beginner</p>
@@ -153,21 +171,21 @@
           <div class="cmc-pill">Popular</div>
         </div>
         <div class="cmc" style="--cc:#7B68EE">
-          <div class="cmc-icon" style="font-size:14px">C++</div>
+          <div class="cmc-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg" alt="C++" class="lang-logo"></div>
           <div class="cmc-info">
             <p class="cmc-title">C++ Programming</p>
             <p class="cmc-sub">15 lessons · Intermediate</p>
           </div>
         </div>
         <div class="cmc" style="--cc:#ffc800">
-          <div class="cmc-icon">☕</div>
+          <div class="cmc-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" alt="Java" class="lang-logo"></div>
           <div class="cmc-info">
             <p class="cmc-title">Java</p>
             <p class="cmc-sub">18 lessons · Beginner</p>
           </div>
         </div>
         <div class="cmc" style="--cc:#ff6b6b">
-          <div class="cmc-icon" style="font-size:14px">C#</div>
+          <div class="cmc-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/csharp/csharp-original.svg" alt="C#" class="lang-logo"></div>
           <div class="cmc-info">
             <p class="cmc-title">C# / .NET</p>
             <p class="cmc-sub">14 lessons · Intermediate</p>
@@ -175,9 +193,9 @@
         </div>
       </div>
     </div>
-    <div class="alt-feat-text">
+    <div class="alt-feat-text animate-in-right">
       <h2>Pick your<br>language</h2>
-      <p>Start with C fundamentals or jump into object-oriented languages. Every course is carefully structured to take you from zero to writing real, working code.</p>
+      <p>Start with C and build a foundation that makes <span class="gw">every other language</span> click. Each course follows a deliberate path — from syntax to logic to <span class="gw">programs you actually wrote</span> yourself.</p>
     </div>
   </div>
 </section>
@@ -185,7 +203,7 @@
 <!-- ══════════════ FINAL CTA ══════════════ -->
 <section class="cta-final">
   <div class="cta-final-inner">
-    <div class="cta-bot-mini">🤖</div>
+    <div class="cta-bot-mini"><i class="fi fi-sr-terminal"></i></div>
     <h2>Start coding today.<br>It's completely free.</h2>
     <p>No experience needed. No credit card. No excuses.</p>
     <div class="cta-btns">
@@ -203,7 +221,7 @@
     <div class="footer-top-inner">
       <div class="footer-brand-block">
         <div class="footer-logo"><img src="codehub-logo.png" alt="CodeHub" class="footer-logo-img" /></div>
-<p class="footer-tagline">Lowkey the best way to learn coding fr 🤙</p>
+<p class="footer-tagline">Lowkey the best way to learn coding fr</p>
         <!-- Social icons -->
         <div class="footer-socials">
           <a href="javascript:void(0)" class="fsocial" aria-label="GitHub" (click)="showPopup('github')">
@@ -296,9 +314,43 @@
   <!-- Divider -->
   <div class="footer-divider"></div>
 
+  <!-- Theme toggle -->
+  <div class="footer-theme-row">
+    <div class="theme-toggle-wrap">
+      <span class="tt-label" [class.tt-active]="theme.current === 'light'">Light</span>
+      <button class="tt-switch" [class.tt-dark]="theme.current !== 'light'" (click)="theme.toggle()" aria-label="Toggle theme">
+        <span class="tt-track">
+          <span class="tt-star s1"></span>
+          <span class="tt-star s2"></span>
+          <span class="tt-star s3"></span>
+          <span class="tt-star s4"></span>
+          <span class="tt-star s5"></span>
+        </span>
+        <span class="tt-knob">
+          @if (theme.current === 'light') {
+            <svg class="tt-sun" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="4.5" fill="#FFC700"/>
+              <line x1="12" y1="1.5" x2="12" y2="4.5"   stroke="#FFC700" stroke-width="2" stroke-linecap="round"/>
+              <line x1="12" y1="19.5" x2="12" y2="22.5" stroke="#FFC700" stroke-width="2" stroke-linecap="round"/>
+              <line x1="1.5" y1="12" x2="4.5" y2="12"   stroke="#FFC700" stroke-width="2" stroke-linecap="round"/>
+              <line x1="19.5" y1="12" x2="22.5" y2="12" stroke="#FFC700" stroke-width="2" stroke-linecap="round"/>
+              <line x1="4.4" y1="4.4" x2="6.5" y2="6.5"   stroke="#FFC700" stroke-width="2" stroke-linecap="round"/>
+              <line x1="17.5" y1="17.5" x2="19.6" y2="19.6" stroke="#FFC700" stroke-width="2" stroke-linecap="round"/>
+              <line x1="19.6" y1="4.4" x2="17.5" y2="6.5"  stroke="#FFC700" stroke-width="2" stroke-linecap="round"/>
+              <line x1="6.5" y1="17.5" x2="4.4" y2="19.6"  stroke="#FFC700" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          } @else {
+            <svg class="tt-moon" viewBox="0 0 24 24"><path fill="#FFDD67" d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+          }
+        </span>
+      </button>
+      <span class="tt-label" [class.tt-active]="theme.current !== 'light'">Dark</span>
+    </div>
+  </div>
+
   <!-- Bottom legal bar -->
   <div class="footer-bottom">
-    <p class="footer-copy">© 2026 CodeHub — no cap, this is the only grind that actually pays off 💻🔥</p>
+    <p class="footer-copy">© 2026 CodeHub — no cap, this is the only grind that actually pays off</p>
     <div class="footer-legal">
       <a href="javascript:void(0)" (click)="showPopup('privacy')">Privacy Policy</a>
       <a href="javascript:void(0)" (click)="showPopup('terms')">Terms of Service</a>

@@ -91,6 +91,12 @@ body.nav-ready .nav-link {
   flex-shrink: 0;
   line-height: 1;
 }
+.nav-svg-icon {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  display: block;
+}
 
 .nav-label {
   font-size: 15px;

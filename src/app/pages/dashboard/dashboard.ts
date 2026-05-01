@@ -4,7 +4,16 @@ import { RouterLink, Router } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { Api } from '../../services/api';
 import { Sidebar } from '../../shared/sidebar/sidebar';
+import { getCourseIconUrl } from '../../utils/course-icons';
 
+/**
+ * Dashboard / Learn Page Component
+ * Protected page (login required)
+ * Main page after login: shows winding lesson path with course tabs + XP/streak/hearts
+ * - Loads user's enrolled courses
+ * - Builds S-curve "path" of lessons (done/active/locked states)
+ * - Tracks user level, XP, daily goal progress
+ */
 @Component({
   selector: 'app-dashboard',
   imports: [CommonModule, UpperCasePipe, RouterLink, Sidebar],
@@ -12,31 +21,45 @@ import { Sidebar } from '../../shared/sidebar/sidebar';
   styleUrl: './dashboard.css'
 })
 export class Dashboard implements OnInit {
+  // User data + rank on leaderboard
   user: any = null;
   userRank = 0;
 
-  noCoursesEnrolled = false;
-  coursesLoading = true;
-  lessonsLoading = true;
-  private userPickedCourse = false;
-  private preferredCourseId: number | null = null;
+  // State flags
+  noCoursesEnrolled = false; // No enrolled courses → show "Enroll" button
+  coursesLoading = true; // Loading enrolled courses list
+  lessonsLoading = true; // Loading lessons for selected course
+  private userPickedCourse = false; // User manually selected a course tab
+  private preferredCourseId: number | null = null; // Course user came from (from courses page)
 
   constructor(private auth: Auth, private api: Api, private router: Router, private cdr: ChangeDetectorRef) {}
 
-  courses: any[] = [];
-  selectedCourse: any = null;
-  pathNodes: any[] = [];
-  showCoursePopup = false;
-  showGuidebook   = false;
-  showProPopup    = false;
-  trialLoading    = false;
-  trialSuccess    = false;
-  trialEndsAt     = '';
+  // Courses + lessons
+  courses: any[] = []; // User's enrolled courses
+  selectedCourse: any = null; // Currently selected course (for showing its lessons)
+  pathNodes: any[] = []; // Lessons in winding S-curve path (with position left/center/right)
 
+  // Popup/modal visibility
+  showCoursePopup = false; // Show course selector dropdown
+  showGuidebook = false; // Show lesson guide modal
+  showProPopup = false; // Show "upgrade to pro" modal
+  trialLoading = false; // Loading trial activation
+  trialSuccess = false; // Trial activated
+  trialEndsAt = ''; // When trial expires (date string)
+
+  // Alternating positions for lesson nodes in winding path (Duolingo style)
   private positions = ['center', 'right', 'center', 'left', 'center', 'right', 'center', 'left'];
 
+  /**
+   * Initialize dashboard
+   * 1. Load user from localStorage
+   * 2. Restore theme color from previous session
+   * 3. Load courses + lessons (from cache if available, then fresh from backend)
+   * 4. Get user's current leaderboard rank
+   */
   ngOnInit() {
     this.user = this.auth.getUser();
+    this.restoreTrial();
 
     // Restore saved theme immediately (no flicker on page change)
     const savedColor = localStorage.getItem('codehub_theme_color');
@@ -129,6 +152,13 @@ export class Dashboard implements OnInit {
     });
   }
 
+  /**
+   * User clicked a course tab
+   * 1. Calculate dark color version of course color
+   * 2. Switch to that course (update banner + winding path)
+   * 3. Apply theme colors (button green, accents)
+   * 4. Load lessons for this course
+   */
   selectCourse(course: any) {
     if (!course.colorDark) {
       course.colorDark = this.getDarkColor(course.color);
@@ -142,6 +172,12 @@ export class Dashboard implements OnInit {
     this.loadCourseLessons(course.id);
   }
 
+  /**
+   * Load lessons for selected course
+   * 1. Show cached lessons immediately (instant UI update)
+   * 2. Fetch fresh lessons from backend in background
+   * 3. Build winding path nodes from lesson list
+   */
   private loadCourseLessons(courseId: number) {
     // Show cached lessons for this course instantly
     const lessonCache = this.auth.getCache('lessons_' + courseId + '_' + this.user?.id);
@@ -175,6 +211,8 @@ export class Dashboard implements OnInit {
     return courses[0];
   }
 
+  // Get darker version of a light color (for 3D button shadow effect)
+  // If color not in map, darken it mathematically
   private getDarkColor(lightColor: string): string {
     const colorMap: Record<string, string> = {
       '#04e88d': '#02a864',
@@ -218,6 +256,8 @@ export class Dashboard implements OnInit {
     this.pathNodes = lessons.map((l, i) => ({ ...l, pos: this.positions[i % 8] }));
   }
 
+  // Generate SVG path for curved "road" between lesson nodes in winding path
+  // Used in HTML template to draw connecting lines between lessons
   getRoadPath(from: string, to: string): string {
     const x: Record<string, number> = { left: 110, center: 250, right: 390 };
     const fx = x[from] ?? 250;
@@ -227,48 +267,57 @@ export class Dashboard implements OnInit {
     return `M ${fx} 0 C ${fx} 60 ${tx} 40 ${tx} 100`;
   }
 
-  courseEmoji(icon: string): string {
-    const map: Record<string, string> = {
-      'c.png':      '⚙️',
-      'cpp.png':    '🔷',
-      'java.png':   '☕',
-      'csharp.png': '🎯',
-      'python.png': '🐍',
-      'js.png':     '🟨',
-      'html.png':   '🌐',
-      'css.png':    '🎨',
-    };
-    return map[icon?.toLowerCase()] ?? '📘';
+  getCourseIcon(icon: string): string {
+    return getCourseIconUrl(icon);
   }
 
+  // Calculate user's current level (100 XP per level, starting at level 1)
   get level()     { return Math.floor((this.user?.xp || 0) / 100) + 1; }
+  // XP progress within current level (0-99)
   get xpInLevel() { return (this.user?.xp || 0) % 100; }
 
+  // Number of lessons completed in current course
   get lessonsCompleted() {
     return this.pathNodes.filter(l => l.state === 'done').length;
   }
+  // Progress to reach rank on leaderboard (complete 10 lessons = rank up)
   get leaderboardProgress()  { return Math.min((this.lessonsCompleted / 10) * 100, 100); }
   get leaderboardNeeded()    { return Math.max(10 - this.lessonsCompleted, 0); }
 
+  // Daily XP goal (complete lessons to reach 20 XP per day)
   readonly dailyXpGoal  = 20;
   get dailyXp()         { return Math.min((this.user?.xp || 0) % this.dailyXpGoal, this.dailyXpGoal); }
   get dailyXpProgress() { return (this.dailyXp / this.dailyXpGoal) * 100; }
 
+  // Array of booleans: [true, true, false, false, false] for 2 hearts filled out of 5
   get heartsArray() { return Array(5).fill(0).map((_, i) => i < (this.user?.hearts || 0)); }
+
+  private restoreTrial() {
+    const saved = localStorage.getItem('codehub_pro_trial');
+    if (!saved) return;
+    try {
+      const { endsAt } = JSON.parse(saved);
+      if (endsAt && new Date(endsAt) > new Date()) {
+        this.trialSuccess = true;
+        this.trialEndsAt = new Date(endsAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      } else {
+        localStorage.removeItem('codehub_pro_trial');
+      }
+    } catch { localStorage.removeItem('codehub_pro_trial'); }
+  }
 
   activateTrial() {
     if (this.trialLoading || this.trialSuccess) return;
     this.trialLoading = true;
-    this.api.startTrial(this.user?.id || 0).subscribe({
-      next: (res: any) => {
-        this.trialLoading = false;
-        if (res.success) {
-          this.trialSuccess = true;
-          const d = new Date(res.ends_at);
-          this.trialEndsAt = d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-        }
-      },
-      error: () => { this.trialLoading = false; }
-    });
+    this.cdr.detectChanges();
+    setTimeout(() => {
+      const endsAt = new Date();
+      endsAt.setDate(endsAt.getDate() + 7);
+      this.trialLoading = false;
+      this.trialSuccess = true;
+      this.trialEndsAt = endsAt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      localStorage.setItem('codehub_pro_trial', JSON.stringify({ endsAt: endsAt.toISOString() }));
+      this.cdr.detectChanges();
+    }, 900);
   }
 }

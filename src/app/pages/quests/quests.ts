@@ -15,6 +15,12 @@ interface Quest {
   claimed: boolean;
 }
 
+/**
+ * Quests / Side Tasks Page Component
+ * Protected page (login required)
+ * Shows daily + weekly challenges to earn bonus XP
+ * Examples: "Complete a lesson", "Score 100% on quiz", "Maintain streak"
+ */
 @Component({
   selector: 'app-quests',
   imports: [CommonModule, Sidebar],
@@ -22,12 +28,20 @@ interface Quest {
   styleUrl: './quests.css'
 })
 export class Quests implements OnInit, OnDestroy {
-  loading = true;
-  dailyQuests: Quest[] = [];
-  weeklyQuest: Quest | null = null;
-  user: any;
-  timerDisplay = '';
-  private timerInterval: any;
+  private readonly iconMap: Record<string, string> = {
+    '📖': 'assets/icons/learn icon.svg',
+    '🎯': 'assets/icons/quests icon.svg',
+    '🔥': 'assets/icons/steak icon.svg',
+    '⚡': 'assets/icons/energy icon.svg',
+    '🏆': 'assets/icons/leaderboard icon.svg',
+  };
+
+  loading = true; // Loading quests from backend
+  dailyQuests: Quest[] = []; // Today's quests
+  weeklyQuest: Quest | null = null; // This week's special quest
+  user: any; // Current user
+  timerDisplay = ''; // Countdown to reset (HH:MM:SS)
+  private timerInterval: any; // Timer interval
 
   constructor(private auth: Auth, private api: Api, private cdr: ChangeDetectorRef) {}
 
@@ -57,6 +71,8 @@ export class Quests implements OnInit, OnDestroy {
     this.timerInterval = setInterval(tick, 1000);
   }
 
+  resolveIcon(icon: string): string { return this.iconMap[icon] || icon; }
+
   ngOnDestroy() { clearInterval(this.timerInterval); }
 
   ngOnInit() {
@@ -82,11 +98,12 @@ export class Quests implements OnInit, OnDestroy {
           const localClaimed = new Set(this.dailyQuests.filter(q => q.claimed).map(q => q.id));
           this.dailyQuests = res.daily.map((q: any) => ({
             ...q,
+            icon: this.resolveIcon(q.icon),
             claimed: q.claimed || localClaimed.has(q.id)
           }));
           if (res.weekly) {
             const wClaimed = this.weeklyQuest?.claimed ?? false;
-            this.weeklyQuest = { ...res.weekly, claimed: res.weekly.claimed || wClaimed };
+            this.weeklyQuest = { ...res.weekly, icon: this.resolveIcon(res.weekly.icon), claimed: res.weekly.claimed || wClaimed };
           } else {
             this.weeklyQuest = null;
           }
@@ -100,10 +117,10 @@ export class Quests implements OnInit, OnDestroy {
   private buildFallbackQuests(): Quest[] {
     const streak = this.user?.streak || 0;
     return [
-      { id: 1, icon: '📖', title: 'Complete a Lesson', desc: 'Finish any 1 lesson today',         xp: 10, progress: 0,               goal: 1, claimed: false },
-      { id: 2, icon: '🎯', title: 'Quiz Master',        desc: 'Score 100% on any quiz',            xp: 15, progress: 0,               goal: 1, claimed: false },
-      { id: 3, icon: '🔥', title: 'On Fire!',           desc: 'Log in today to keep your streak',  xp: 5,  progress: Math.min(streak, 1), goal: 1, claimed: false },
-      { id: 4, icon: '⚡', title: 'Speed Coder',        desc: 'Finish 3 lessons in one day',       xp: 20, progress: 0,               goal: 3, claimed: false },
+      { id: 1, icon: 'assets/icons/learn icon.svg',       title: 'Complete a Lesson', desc: 'Finish any 1 lesson today',        xp: 10, progress: 0,               goal: 1, claimed: false },
+      { id: 2, icon: 'assets/icons/quests icon.svg',      title: 'Quiz Master',        desc: 'Score 100% on any quiz',           xp: 15, progress: 0,               goal: 1, claimed: false },
+      { id: 3, icon: 'assets/icons/steak icon.svg',       title: 'On Fire!',           desc: 'Log in today to keep your streak', xp: 5,  progress: Math.min(streak, 1), goal: 1, claimed: false },
+      { id: 4, icon: 'assets/icons/energy icon.svg',      title: 'Speed Coder',        desc: 'Finish 3 lessons in one day',      xp: 20, progress: 0,               goal: 3, claimed: false },
     ];
   }
 

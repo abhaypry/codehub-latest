@@ -64,8 +64,9 @@
 }
 
 .learn-hearts { display: flex; gap: 2px; }
-.lheart { font-size: 16px; }
+.lheart { font-size: 16px; display: flex; align-items: center; }
 .lheart.empty { filter: grayscale(1); opacity: 0.3; }
+.lheart-icon { width: 20px; height: 20px; object-fit: contain; display: block; }
 
 /* ── Guidebook button ─────────────────────────────────────────── */
 .btn-guidebook {

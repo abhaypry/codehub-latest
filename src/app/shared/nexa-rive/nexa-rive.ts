@@ -21,7 +21,7 @@ export class NexaRive implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.rive = new Rive({
-      src: 'http://localhost/codehub-api/nexa.riv',
+      src: 'nexa.riv',
       canvas: this.canvasRef.nativeElement,
       autoplay: true,
       stateMachines: this.stateMachine || undefined,

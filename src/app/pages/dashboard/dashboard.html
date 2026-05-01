@@ -11,10 +11,12 @@
       </div>
     } @else if (noCoursesEnrolled) {
       <div class="no-courses-state">
-        <div class="no-courses-icon">📚</div>
+        <div class="no-courses-icon">
+          <img src="assets/icons/courses.svg" alt="Courses" class="no-courses-svg" />
+        </div>
         <h2 class="no-courses-title">No courses enrolled yet!</h2>
         <p class="no-courses-sub">Pick the languages you want to learn and start your coding journey.</p>
-        <a routerLink="/choose" class="btn-duo btn-duo-primary">Choose Your Courses</a>
+        <a routerLink="/choose" class="btn-duo btn-duo-primary no-courses-btn">Choose Your Courses</a>
       </div>
     } @else {
 
@@ -67,7 +69,10 @@
           <div class="gb-modal" (click)="$event.stopPropagation()">
             <div class="gb-modal-header">
               <div class="gb-course-badge" [style.background]="selectedCourse?.color">
-                {{ courseEmoji(selectedCourse?.icon) }} {{ selectedCourse?.title }}
+                @if (getCourseIcon(selectedCourse?.icon)) {
+                  <img [src]="getCourseIcon(selectedCourse?.icon)" [alt]="selectedCourse?.title" class="gb-course-logo">
+                }
+                {{ selectedCourse?.title }}
               </div>
               <button class="gb-modal-close" (click)="showGuidebook = false">✕</button>
             </div>
@@ -125,7 +130,7 @@
             <div class="road-connector">
               <svg class="road-svg" viewBox="0 0 500 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
                 <path [attr.d]="getRoadPath(pathNodes[i-1].pos, node.pos)"
-                      stroke="#3a3a3a" stroke-width="28" fill="none" stroke-linecap="round"/>
+                      stroke="currentColor" stroke-width="28" fill="none" stroke-linecap="round"/>
                 <path [attr.d]="getRoadPath(pathNodes[i-1].pos, node.pos)"
                       stroke="#ffc800" stroke-width="2.5" fill="none" stroke-linecap="round"
                       stroke-dasharray="18 14" opacity="0.5"/>
@@ -211,69 +216,51 @@
     <!-- Stats row -->
     <div class="rp-stats">
       <div class="rp-stat">
-        <span class="rp-icon">🏆</span>
+        <span class="rp-icon"><img src="assets/icons/leaderboard icon.svg" alt="" class="stat-svg-icon" /></span>
         <span class="rp-val trophy-rank">#{{ userRank || '?' }}</span>
       </div>
       <div class="rp-stat">
-        <span class="rp-icon fire-icon">🔥</span>
+        <span class="rp-icon"><img [src]="(user?.streak || 0) > 0 ? 'assets/icons/steak icon.svg' : 'assets/icons/grey steak.svg'" alt="" class="stat-svg-icon" /></span>
         <span class="rp-val orange">{{ user?.streak || 0 }}</span>
       </div>
       <div class="rp-stat">
-        <span class="rp-icon gem-icon">💎</span>
+        <span class="rp-icon"><img src="assets/icons/energy icon.svg" alt="" class="stat-svg-icon" /></span>
         <span class="rp-val blue">{{ user?.xp || 0 }}</span>
       </div>
       <div class="rp-stat">
-        <span class="rp-icon">❤️</span>
+        <span class="rp-icon"><img src="assets/icons/heart icon.svg" alt="" class="stat-svg-icon" /></span>
         <span class="rp-val red">{{ user?.hearts || 0 }}</span>
       </div>
     </div>
 
     <!-- PRO card -->
-    <div class="pro-card">
-      <div class="pro-card-top">
-        <div class="pro-card-left">
+    <div class="pro-card" [class.pro-card-active]="trialSuccess">
+      @if (trialSuccess) {
+        <div class="pro-active-header">
           <div class="pro-badge">PRO</div>
-          <p class="pro-title">Try Pro for free</p>
-          <p class="pro-desc">Get rid of ads, special practice sessions, and unlimited access to amazing levels!</p>
+          <span class="pro-active-check">✓ Active</span>
         </div>
-        <div class="pro-mascot">🤖</div>
-      </div>
-      <button class="pro-btn" (click)="showProPopup = true">TRY 1 WEEK FREE</button>
+        <div class="pro-active-mascot"><img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png" class="pro-mascot-img" alt="pro"></div>
+        <p class="pro-active-title">You're on Pro!</p>
+        <p class="pro-active-until">Expires {{ trialEndsAt }}</p>
+        <div class="pro-active-perks">
+          <span>💚 Unlimited hearts</span>
+          <span>🚫 No ads</span>
+          <span>⭐ All levels</span>
+        </div>
+      } @else {
+        <div class="pro-card-top">
+          <div class="pro-card-left">
+            <div class="pro-badge">PRO</div>
+            <p class="pro-title">Try Pro for free</p>
+            <p class="pro-desc">Get rid of ads, special practice sessions, and unlimited access to amazing levels!</p>
+          </div>
+          <div class="pro-mascot"><img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png" class="pro-mascot-img" alt="pro"></div>
+        </div>
+        <button class="pro-btn" (click)="showProPopup = true">TRY 1 WEEK FREE</button>
+      }
     </div>
 
-    <!-- PRO trial popup -->
-    @if (showProPopup) {
-      <div class="pro-overlay" (click)="showProPopup = false">
-        <div class="pro-modal" (click)="$event.stopPropagation()">
-          <button class="pro-modal-close" (click)="showProPopup = false">✕</button>
-
-          <div class="pro-modal-mascot">🤖</div>
-          <div class="pro-modal-badge">PRO</div>
-          <h2 class="pro-modal-title">Try Pro for free</h2>
-          <p class="pro-modal-sub">No payment needed. Cancel anytime.</p>
-
-          <ul class="pro-modal-perks">
-            <li><span class="perk-check">✓</span> Unlimited hearts — never get blocked</li>
-            <li><span class="perk-check">✓</span> No ads, ever</li>
-            <li><span class="perk-check">✓</span> Special practice sessions</li>
-            <li><span class="perk-check">✓</span> Access to all advanced levels</li>
-            <li><span class="perk-check">✓</span> Priority leaderboard badge</li>
-          </ul>
-
-          @if (trialSuccess) {
-            <div class="pro-success-box">
-              🎉 Pro trial activated! Enjoy until <strong>{{ trialEndsAt }}</strong>.
-            </div>
-            <button class="pro-modal-btn" (click)="showProPopup = false">Awesome, let's go!</button>
-          } @else {
-            <button class="pro-modal-btn" (click)="activateTrial()" [disabled]="trialLoading">
-              @if (trialLoading) { Activating... } @else { TRY 1 WEEK FREE }
-            </button>
-            <button class="pro-modal-later" (click)="showProPopup = false">Maybe later</button>
-          }
-        </div>
-      </div>
-    }
 
     <!-- Leaderboard -->
     <div class="rp-card">
@@ -308,5 +295,39 @@
     </div>
 
   </aside>
+
+  <!-- PRO trial popup — rendered at dash-layout root to escape right-panel stacking context -->
+  @if (showProPopup) {
+    <div class="pro-overlay" (click)="showProPopup = false">
+      <div class="pro-modal" (click)="$event.stopPropagation()">
+        <button class="pro-modal-close" (click)="showProPopup = false">✕</button>
+
+        <div class="pro-modal-mascot"><img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png" class="pro-mascot-img" alt="pro"></div>
+        <div class="pro-modal-badge">PRO</div>
+        <h2 class="pro-modal-title">Try Pro for free</h2>
+        <p class="pro-modal-sub">No payment needed. Cancel anytime.</p>
+
+        <ul class="pro-modal-perks">
+          <li><span class="perk-check">✓</span> Unlimited hearts — never get blocked</li>
+          <li><span class="perk-check">✓</span> No ads, ever</li>
+          <li><span class="perk-check">✓</span> Special practice sessions</li>
+          <li><span class="perk-check">✓</span> Access to all advanced levels</li>
+          <li><span class="perk-check">✓</span> Priority leaderboard badge</li>
+        </ul>
+
+        @if (trialSuccess) {
+          <div class="pro-success-box">
+            🎉 Pro trial activated! Enjoy until <strong>{{ trialEndsAt }}</strong>.
+          </div>
+          <button class="pro-modal-btn" (click)="showProPopup = false">Awesome, let's go!</button>
+        } @else {
+          <button class="pro-modal-btn" (click)="activateTrial()" [disabled]="trialLoading">
+            @if (trialLoading) { Activating... } @else { TRY 1 WEEK FREE }
+          </button>
+          <button class="pro-modal-later" (click)="showProPopup = false">Maybe later</button>
+        }
+      </div>
+    </div>
+  }
 
 </div>

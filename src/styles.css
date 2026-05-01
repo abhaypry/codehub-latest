@@ -20,11 +20,32 @@
   --radius: 16px;
 }
 
+/* ── Light theme ── */
+body.theme-light {
+  --bg:          #f5f5f5;
+  --bg2:         #ffffff;
+  --bg3:         #eaeaea;
+  --border:      #d0d0d0;
+  --text:        #1e1e1e;
+  --text-muted:  #6b7280;
+}
+
+/* ── Midnight (AMOLED) theme ── */
+body.theme-midnight {
+  --bg:          #000000;
+  --bg2:         #0a0a0a;
+  --bg3:         #111111;
+  --border:      #1e1e1e;
+  --text:        #ffffff;
+  --text-muted:  #7a8fa0;
+}
+
 body {
   font-family: 'Nunito', sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
+  transition: background 0.25s ease, color 0.25s ease;
 }
 
 a { text-decoration: none; color: inherit; }
@@ -161,3 +182,101 @@ input, textarea { font-family: inherit; }
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* ── Light / Dark toggle switch (shared) ── */
+.theme-toggle-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.tt-label {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: color 0.3s;
+}
+.tt-label.tt-active { color: var(--text); }
+
+.tt-switch {
+  position: relative;
+  width: 72px;
+  height: 36px;
+  border-radius: 50px;
+  background: #6c93f0;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  overflow: hidden;
+  transition: background 0.4s ease;
+  flex-shrink: 0;
+}
+.tt-switch.tt-dark { background: #1b2145; }
+
+.tt-track {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.tt-star {
+  position: absolute;
+  background: #ffffff;
+  border-radius: 50%;
+  opacity: 0;
+}
+.tt-switch.tt-dark .tt-star {
+  animation: tt-twinkle 2.4s ease-in-out infinite;
+}
+.tt-star.s1 { width: 3px; height: 3px; top: 8px;  left: 10px; animation-delay: 0s;    }
+.tt-star.s2 { width: 2px; height: 2px; top: 19px; left: 18px; animation-delay: 0.6s;  }
+.tt-star.s3 { width: 2px; height: 2px; top: 10px; left: 21px; animation-delay: 1.2s;  }
+.tt-star.s4 { width: 2px; height: 2px; top: 23px; left: 11px; animation-delay: 1.8s;  }
+.tt-star.s5 { width: 3px; height: 3px; top: 15px; left: 6px;  animation-delay: 0.9s;  }
+
+@keyframes tt-twinkle {
+  0%, 100% { opacity: 0.9; transform: scale(1); }
+  50%       { opacity: 0.2; transform: scale(0.5); }
+}
+
+.tt-knob {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.28);
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), background 0.4s, box-shadow 0.4s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.tt-switch:not(.tt-dark) .tt-knob {
+  animation: tt-sun-glow 3s ease-in-out infinite;
+}
+.tt-switch.tt-dark .tt-knob {
+  transform: translateX(36px);
+  background: #2b3278;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+@keyframes tt-sun-glow {
+  0%, 100% { box-shadow: 0 2px 8px rgba(0,0,0,0.2), 0 0 10px 2px rgba(255,200,0,0.35); }
+  50%       { box-shadow: 0 2px 8px rgba(0,0,0,0.2), 0 0 18px 5px rgba(255,200,0,0.55); }
+}
+
+.tt-moon { width: 17px; height: 17px; display: block; }
+.tt-sun  { width: 17px; height: 17px; display: block; animation: tt-spin-slow 10s linear infinite; }
+@keyframes tt-spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+
+/* Inline icon utility — replaces emoji in text */
+.inline-icon { width: 18px; height: 18px; vertical-align: middle; display: inline-block; object-fit: contain; margin-right: 3px; }
+.header-icon { width: 32px; height: 32px; vertical-align: middle; object-fit: contain; margin-right: 6px; }
+.quest-icon-img { width: 48px; height: 48px; object-fit: contain; flex-shrink: 0; }

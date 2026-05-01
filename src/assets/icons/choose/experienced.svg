@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Rocket body -->
+  <path d="M32 6 Q44 14 46 32 L36 40 L28 40 L18 32 Q20 14 32 6 Z" fill="#7B1FA2"/>
+  <!-- Rocket top tip -->
+  <path d="M32 6 Q38 10 40 18 L32 16 L24 18 Q26 10 32 6 Z" fill="#9C27B0"/>
+  <!-- Window -->
+  <circle cx="32" cy="26" r="7" fill="#E1F5FE"/>
+  <circle cx="32" cy="26" r="5" fill="#29B6F6"/>
+  <circle cx="29" cy="23" r="2" fill="rgba(255,255,255,0.6)"/>
+  <!-- Left fin -->
+  <path d="M18 32 L10 42 L22 38 Z" fill="#6A1B9A"/>
+  <!-- Right fin -->
+  <path d="M46 32 L54 42 L42 38 Z" fill="#6A1B9A"/>
+  <!-- Exhaust -->
+  <path d="M28 40 Q30 48 32 52 Q34 48 36 40 Z" fill="#FF6F00"/>
+  <path d="M29 40 Q31 46 32 50 Q33 46 35 40 Z" fill="#FFD54F"/>
+  <!-- Shine on body -->
+  <path d="M26 12 Q24 20 24 28" stroke="rgba(255,255,255,0.25)" stroke-width="2" fill="none" stroke-linecap="round"/>
+</svg>

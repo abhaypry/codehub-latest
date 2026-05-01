@@ -3,7 +3,7 @@
 <div class="page-content">
 <div class="page">
   <div class="page-header">
-    <h1>🏆 Leaderboard</h1>
+    <h1><img src="assets/icons/leaderboard icon.svg" class="header-icon" alt=""> Leaderboard</h1>
     <p>Top coders ranked by XP</p>
   </div>
 
@@ -18,7 +18,7 @@
             }
           </div>
           <div class="pod-name">{{ leaderboard[1].name }}</div>
-          <div class="pod-xp">⚡ {{ leaderboard[1].xp }}</div>
+          <div class="pod-xp"><img src="assets/icons/energy icon.svg" class="inline-icon" alt="xp"> {{ leaderboard[1].xp }}</div>
           <div class="pod-base silver-base"><span>2</span></div>
         </div>
         <div class="pod-item gold-item">
@@ -31,7 +31,7 @@
             }
           </div>
           <div class="pod-name">{{ leaderboard[0].name }}</div>
-          <div class="pod-xp">⚡ {{ leaderboard[0].xp }}</div>
+          <div class="pod-xp"><img src="assets/icons/energy icon.svg" class="inline-icon" alt="xp"> {{ leaderboard[0].xp }}</div>
           <div class="pod-base gold-base"><span>1</span></div>
         </div>
         <div class="pod-item">
@@ -43,7 +43,7 @@
             }
           </div>
           <div class="pod-name">{{ leaderboard[2].name }}</div>
-          <div class="pod-xp">⚡ {{ leaderboard[2].xp }}</div>
+          <div class="pod-xp"><img src="assets/icons/energy icon.svg" class="inline-icon" alt="xp"> {{ leaderboard[2].xp }}</div>
           <div class="pod-base bronze-base"><span>3</span></div>
         </div>
       </div>
@@ -70,8 +70,8 @@
             @if (+entry.id === userId) { <span class="you-tag">You</span> }
           </div>
           <div class="lb-stats">
-            <span class="lb-streak">🔥 {{ entry.streak }}</span>
-            <span class="lb-xp">⚡ {{ entry.xp }}</span>
+            <span class="lb-streak"><img src="assets/icons/steak icon.svg" class="inline-icon" alt="streak"> {{ entry.streak }}</span>
+            <span class="lb-xp"><img src="assets/icons/energy icon.svg" class="inline-icon" alt="xp"> {{ entry.xp }}</span>
           </div>
         </div>
       }

@@ -4,7 +4,18 @@ import { CommonModule } from '@angular/common';
 import { Api } from '../../services/api';
 import { Auth } from '../../services/auth';
 import { NexaRive } from '../../shared/nexa-rive/nexa-rive';
+import { getCourseIconUrl } from '../../utils/course-icons';
 
+/**
+ * Choose Courses / Onboarding Page Component
+ * Protected page (login required)
+ * Multi-step wizard after registration:
+ * 1. Select courses to enroll in
+ * 2. Pick skill level (beginner/basics/experienced)
+ * 3. Pick education type (student/university/professional/self-taught)
+ * 4. Pick learning goal (daily time commitment)
+ * 5. Enroll in selected courses → go to dashboard
+ */
 @Component({
   selector: 'app-choose',
   imports: [CommonModule, NexaRive],
@@ -12,26 +23,27 @@ import { NexaRive } from '../../shared/nexa-rive/nexa-rive';
   styleUrl: './choose.css'
 })
 export class Choose implements OnInit {
-  step = 1;
-  selectedIds: Set<number> = new Set();
-  selectedLevel: string | null = null;
-  selectedEdu:   string | null = null;
-  selectedGoal:  string | null = null;
-  enrollmentError = '';
+  // Wizard state
+  step = 1; // Current step (1-8): 1=courses, 2-3=intros, 4=level, 5=edu, 6=goal, 7=confirm, 8=loading
+  selectedIds: Set<number> = new Set(); // IDs of selected courses
+  selectedLevel: string | null = null; // Skill level
+  selectedEdu: string | null = null; // Education background
+  selectedGoal: string | null = null; // Learning goal
+  enrollmentError = ''; // Error message if enrollment fails
 
-  courses: any[] = [];
+  courses: any[] = []; // All available courses
 
   levels = [
-    { id: 'beginner',    emoji: '🍎', label: 'Complete Beginner', sub: 'Never written a line of code' },
-    { id: 'basics',      emoji: '🎓', label: 'Know the Basics',   sub: 'Wrote a few programs before'  },
-    { id: 'experienced', emoji: '🧠', label: "I'm Experienced",   sub: 'Here to level up my skills'   },
+    { id: 'beginner',    icon: 'https://cdn-icons-png.flaticon.com/512/10473/10473329.png', label: 'Complete Beginner', sub: 'Never written a line of code' },
+    { id: 'basics',      icon: 'https://cdn-icons-png.flaticon.com/512/10473/10473628.png', label: 'Know the Basics',   sub: 'Wrote a few programs before'  },
+    { id: 'experienced', icon: 'https://cdn-icons-png.flaticon.com/512/10473/10473683.png', label: "I'm Experienced",   sub: 'Here to level up my skills'   },
   ];
 
   educations = [
-    { id: 'school',       emoji: '🍎', label: 'School Student',      sub: 'Still in school or high school'  },
-    { id: 'university',   emoji: '🎓', label: 'University / College', sub: 'Currently studying or graduated' },
-    { id: 'professional', emoji: '💼', label: 'Working Professional', sub: 'Already in the industry'         },
-    { id: 'selftaught',   emoji: '🧠', label: 'Self-taught Learner',  sub: 'Learning on my own terms'        },
+    { id: 'school',       icon: 'https://cdn-icons-png.flaticon.com/512/2097/2097095.png',   label: 'School Student',      sub: 'Still in school or high school'  },
+    { id: 'university',   icon: 'https://cdn-icons-png.flaticon.com/512/8089/8089284.png',   label: 'University / College', sub: 'Currently studying or graduated' },
+    { id: 'professional', icon: 'https://cdn-icons-png.flaticon.com/512/10490/10490250.png', label: 'Working Professional', sub: 'Already in the industry'         },
+    { id: 'selftaught',   icon: 'https://cdn-icons-png.flaticon.com/512/10473/10473447.png', label: 'Self-taught Learner',  sub: 'Learning on my own terms'        },
   ];
 
   goals = [
@@ -68,23 +80,15 @@ export class Choose implements OnInit {
         if (res.success) {
           this.courses = (res.courses || []).map((c: any) => ({
             ...c,
-            name:     c.title,
-            lang:     c.icon,
-            fontSize: this.iconFontSize(c.icon),
+            name:    c.title,
+            iconUrl: getCourseIconUrl(c.title) || getCourseIconUrl(c.icon || ''),
+            letter:  c.title?.[0] || '?',
           }));
           this.cdr.detectChanges();
         }
       },
       error: () => {}
     });
-  }
-
-  private iconFontSize(icon: string): string {
-    if (!icon) return '28px';
-    const len = [...icon].length;
-    if (len === 1) return '34px';
-    if (len === 2) return '28px';
-    return '22px';
   }
 
   toggleCourse(id: number) {
@@ -136,6 +140,20 @@ export class Choose implements OnInit {
     this.api.enrollCourses(userId, courseIds).subscribe({
       next: (res: any) => {
         if (res.success) {
+          // Cache enrolled courses + pre-fetch lessons during loading animation
+          const enrolledCourses = this.courses.filter(c => courseIds.includes(c.id));
+          if (enrolledCourses.length > 0) {
+            this.auth.setCache('dashboard_' + userId, { courses: enrolledCourses });
+            this.auth.setCache('preferred_course_' + userId, enrolledCourses[0]);
+            enrolledCourses.forEach(c => {
+              this.api.getLessons(c.id, userId).subscribe({
+                next: (r: any) => {
+                  if (r.success) this.auth.setCache('lessons_' + c.id + '_' + userId, r.lessons || []);
+                },
+                error: () => {}
+              });
+            });
+          }
           setTimeout(() => this.router.navigate(['/learn']), 2800);
         } else {
           this.enrollmentError = res.message || 'Enrollment failed';

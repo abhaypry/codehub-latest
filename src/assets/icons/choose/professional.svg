@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Briefcase body -->
+  <rect x="8" y="26" width="48" height="32" rx="6" fill="#455A64"/>
+  <!-- Briefcase top band -->
+  <rect x="8" y="34" width="48" height="6" fill="#546E7A"/>
+  <!-- Clasp center -->
+  <rect x="27" y="32" width="10" height="10" rx="2" fill="#78909C"/>
+  <rect x="29" y="34" width="6" height="6" rx="1" fill="#90A4AE"/>
+  <!-- Handle -->
+  <path d="M22 26 L22 18 Q22 14 32 14 Q42 14 42 18 L42 26" stroke="#37474F" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Handle inner cutout -->
+  <path d="M24 26 L24 19 Q24 17 32 17 Q40 17 40 19 L40 26" stroke="#607D8B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Bottom shadow -->
+  <rect x="10" y="52" width="44" height="6" rx="4" fill="#37474F"/>
+  <!-- Shine -->
+  <path d="M12 28 Q18 26 26 27" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+</svg>

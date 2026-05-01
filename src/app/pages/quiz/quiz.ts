@@ -4,6 +4,14 @@ import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { Api } from '../../services/api';
 
+/**
+ * Quiz Page Component
+ * Protected page (login required)
+ * Shows multiple-choice quiz questions one at a time
+ * - Deducts heart if wrong answer
+ * - Blocks quiz if 0 hearts
+ * - Awards XP if quiz passed
+ */
 @Component({
   selector: 'app-quiz',
   imports: [CommonModule, RouterLink],
@@ -11,30 +19,39 @@ import { Api } from '../../services/api';
   styleUrl: './quiz.css'
 })
 export class Quiz implements OnInit {
-  loading    = false;
-  submitting = false;
-  noHearts   = false;
-  finished   = false;
-  error      = '';
+  // State
+  loading    = false; // Loading quiz questions
+  submitting = false; // Submitting quiz (checking answers)
+  noHearts   = false; // User has 0 hearts → quiz blocked
+  finished   = false; // Quiz submitted, show results screen
+  error      = ''; // Error message
 
-  lessonId  = 0;
-  current   = 0;
-  selected: string | null = null;
-  answered  = false;
+  // Quiz data
+  lessonId  = 0; // Which lesson this quiz is for
+  current   = 0; // Currently displayed question index
+  selected: string | null = null; // User's selected option for current question
+  answered  = false; // User has selected an answer (move to next)
 
-  questions: any[] = [];
-  answers: Record<number, string> = {};
+  questions: any[] = []; // All quiz questions
+  answers: Record<number, string> = {}; // User's answers (question ID → selected option)
 
-  quizResult = { passed: false, score: 0, correct: 0, total: 0, xpEarned: 0 };
+  quizResult = { passed: false, score: 0, correct: 0, total: 0, xpEarned: 0 }; // Results after submission
 
   constructor(public auth: Auth, private api: Api, private route: ActivatedRoute, private router: Router) {}
 
+  /**
+   * Initialize quiz
+   * 1. Check if user has hearts (0 hearts = blocked)
+   * 2. Get lesson ID from URL (/quiz/123)
+   * 3. Load quiz questions from backend
+   */
   ngOnInit() {
     if (this.auth.getHearts() === 0) { this.noHearts = true; return; }
     this.lessonId = +this.route.snapshot.paramMap.get('id')! || 1;
     this.loadQuestions();
   }
 
+  // Fetch quiz questions for this lesson from backend
   private loadQuestions() {
     this.loading = true;
     this.api.getQuiz(this.lessonId).subscribe({
@@ -50,11 +67,21 @@ export class Quiz implements OnInit {
     });
   }
 
+  // Current question being displayed
   get question()    { return this.questions[this.current]; }
+  // Quiz progress percentage (how many questions done)
   get progress()    { return this.questions.length ? ((this.current + 1) / this.questions.length) * 100 : 0; }
+  // Array for hearts display: [true, true, false, false, false] for 2 hearts
   get heartsArray() { return Array(5).fill(0).map((_, i) => i < this.auth.getHearts()); }
+  // Check if on last question
   get isLast()      { return this.current === this.questions.length - 1; }
 
+  /**
+   * User selected an answer option
+   * 1. Save selection
+   * 2. Mark as answered (can't change)
+   * 3. Can now move to next question
+   */
   select(opt: string) {
     if (this.answered) return;
     this.selected = opt;
@@ -62,6 +89,11 @@ export class Quiz implements OnInit {
     this.answered = true;
   }
 
+  /**
+   * Move to next question or submit quiz
+   * - If not last: show next question
+   * - If last: submit all answers and show results
+   */
   next() {
     if (!this.isLast) {
       this.current++;
