@@ -94,7 +94,6 @@ export class Quests implements OnInit, OnDestroy {
       next: (res: any) => {
         this.loading = false;
         if (res.success && res.daily?.length) {
-          // Preserve any optimistically-claimed state that isn't confirmed by server yet
           const localClaimed = new Set(this.dailyQuests.filter(q => q.claimed).map(q => q.id));
           this.dailyQuests = res.daily.map((q: any) => ({
             ...q,
@@ -109,8 +108,9 @@ export class Quests implements OnInit, OnDestroy {
           }
           this.auth.setCache(this.todayKey, { daily: this.dailyQuests, weekly: this.weeklyQuest });
         }
+        this.cdr.detectChanges();
       },
-      error: () => { this.loading = false; }
+      error: () => { this.loading = false; this.cdr.detectChanges(); }
     });
   }
 

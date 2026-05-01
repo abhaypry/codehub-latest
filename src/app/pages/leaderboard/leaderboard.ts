@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Auth } from '../../services/auth';
 import { Api } from '../../services/api';
@@ -21,7 +21,7 @@ export class Leaderboard implements OnInit {
   leaderboard: any[] = []; // Top 10 users ranked by XP
   readonly avatarBase = '/assets/'; // Base path for user avatar images
 
-  constructor(private auth: Auth, private api: Api) {}
+  constructor(private auth: Auth, private api: Api, private cdr: ChangeDetectorRef) {}
 
   /**
    * Load page
@@ -44,8 +44,9 @@ export class Leaderboard implements OnInit {
           this.leaderboard = res.leaderboard || [];
           this.auth.setCache('leaderboard', this.leaderboard);
         }
+        this.cdr.detectChanges();
       },
-      error: () => {}
+      error: () => { this.cdr.detectChanges(); }
     });
   }
 }
